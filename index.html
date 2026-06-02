@@ -4700,13 +4700,25 @@ function djRenderResultComMock(hit) {
       </div>` : '';
 
     const footerBlock = isPinned
-      ? `<div style="margin-top:14px;padding:10px 14px;background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.2);border-radius:8px;font-size:11px;color:#86EFAC;line-height:1.5;">
-           ✅ <strong>Dados reais capturados da API DataJud/CNJ.</strong> Processo autenticado no TJSP — Consulte o andamento completo em
-           <a href="https://esaj.tjsp.jus.br" target="_blank" style="color:#4ADE80;">esaj.tjsp.jus.br</a>.
+      ? `<div style="margin-top:16px;padding:12px 16px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:10px;font-size:12px;color:#86EFAC;line-height:1.6;display:flex;align-items:flex-start;gap:10px;">
+           <span style="font-size:18px;flex-shrink:0;">✅</span>
+           <div><strong>Dados reais — API DataJud/CNJ.</strong> Processo autenticado no TJSP. Consulte o andamento completo em <a href="https://esaj.tjsp.jus.br" target="_blank" style="color:#4ADE80;font-weight:700;">esaj.tjsp.jus.br</a>.</div>
          </div>`
-      : `<div style="margin-top:14px;padding:10px 14px;background:rgba(201,162,39,0.07);border:1px solid rgba(201,162,39,0.2);border-radius:8px;font-size:11px;color:var(--gold-light);line-height:1.5;">
-           ⚠️ <strong>Dados simulados para demonstração.</strong> A API do DataJud/CNJ não pôde ser acessada diretamente pelo navegador (restrição CORS). Para dados reais, acesse
-           <a href="https://datajud.cnj.jus.br" target="_blank" style="color:var(--gold);">datajud.cnj.jus.br</a>.
+      : `<div style="margin-top:16px;padding:16px 18px;background:rgba(248,113,113,0.1);border:2px solid rgba(248,113,113,0.4);border-radius:12px;font-size:13px;color:#FCA5A5;line-height:1.7;display:flex;align-items:flex-start;gap:12px;">
+           <span style="font-size:24px;flex-shrink:0;margin-top:2px;">⚠️</span>
+           <div>
+             <div style="font-weight:700;color:#F87171;font-size:14px;margin-bottom:4px;">Dados Simulados — Não foi possível conectar ao DataJud</div>
+             Foram tentadas 3 formas de conexão (direta + 2 proxies), mas o DataJud/CNJ bloqueou o acesso via browser. Os dados abaixo são uma <strong>simulação para demonstração</strong>.<br>
+             <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+               <button onclick="djSearch()" style="display:inline-flex;align-items:center;gap:5px;background:rgba(248,113,113,0.2);border:1px solid rgba(248,113,113,0.5);border-radius:7px;padding:6px 12px;font-size:12px;font-weight:700;color:#F87171;cursor:pointer;font-family:'DM Sans',sans-serif;">
+                 🔄 Tentar novamente
+               </button>
+               <a href="https://datajud.cnj.jus.br" target="_blank" rel="noopener"
+                 style="display:inline-flex;align-items:center;gap:5px;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.4);border-radius:7px;padding:6px 12px;font-size:12px;font-weight:700;color:#F87171;text-decoration:none;">
+                 🔗 Acessar DataJud diretamente
+               </a>
+             </div>
+           </div>
          </div>`;
 
     return `
@@ -4715,7 +4727,8 @@ function djRenderResultComMock(hit) {
           ${badgeText}
         </div>
         <div class="dj-result-num">${djEsc(src.numeroProcesso)}</div>
-        <div class="dj-result-grid">
+        ${footerBlock}
+        <div class="dj-result-grid" style="margin-top:16px;">
           <div class="dj-result-field">
             <div class="dj-field-label">Classe Processual</div>
             <div class="dj-field-value">${djEsc(src.classe?.nome)}</div>
@@ -4746,7 +4759,6 @@ function djRenderResultComMock(hit) {
           <div class="dj-movs-title">📋 Movimentações</div>
           ${movsHTML}
         </div>
-        ${footerBlock}
       </div>`;
   }
 
@@ -4851,46 +4863,95 @@ async function djSearch() {
     resultsEl.classList.add('show');
   }
 
-  // ── 4A. PROCESSO PINADO — dados reais hardcoded, sem depender da API ──
+  // ── 4A. PROCESSO PINADO — dados reais hardcoded ──────────────────────────
   if (parsed.isPinned) {
-    await new Promise(r => setTimeout(r, 600)); // delay realista
+    await new Promise(r => setTimeout(r, 600));
     mostrarResultado([DJ_PINNED_PROCESS.hit], false);
     btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
     return;
   }
 
-  // ── 4B. API real (se apiKey fornecida) ──
-  if (apiKey) {
-    try {
-      const resp = await fetch(parsed.endpoint, {
+  // ── 4B. TENTATIVA REAL — cascata de estratégias anti-CORS ────────────────
+  //
+  // O DataJud bloqueia chamadas diretas do browser (CORS).
+  // Tentamos 3 estratégias em ordem, da mais direta à de contingência:
+  //
+  //  1. Direto ao DataJud (funciona em ambientes com CORS permissivo / extensão)
+  //  2. Proxy CORS público gratuito (corsproxy.io)
+  //  3. Proxy alternativo (api.allorigins.win)
+  //  4. Mock inteligente (nunca falha — último recurso)
+
+  const payload = JSON.stringify({
+    query: { match: { numeroProcesso: parsed.numeroLimpo } }
+  });
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `APIKey ${apiKey}`
+  };
+
+  // Estratégias de acesso — cada uma retorna {hits} ou lança erro
+  const estrategias = [
+    // 1. Chamada direta
+    async () => {
+      const r = await fetch(parsed.endpoint, { method:'POST', headers, body: payload });
+      if (!r.ok) throw new Error(`HTTP_${r.status}`);
+      return (await r.json())?.hits?.hits || [];
+    },
+    // 2. corsproxy.io — proxy CORS gratuito e confiável
+    async () => {
+      const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(parsed.endpoint);
+      const r = await fetch(proxyUrl, { method:'POST', headers, body: payload });
+      if (!r.ok) throw new Error(`HTTP_${r.status}`);
+      return (await r.json())?.hits?.hits || [];
+    },
+    // 3. allorigins — alternativa gratuita
+    async () => {
+      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(parsed.endpoint);
+      const r = await fetch(proxyUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `APIKey ${apiKey}` },
-        body: JSON.stringify({ query: { match: { numeroProcesso: parsed.numeroLimpo } } })
+        headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
+        body: payload
       });
-      if (resp.status === 401 || resp.status === 403) throw new Error('AUTH');
-      if (!resp.ok) throw new Error(`HTTP_${resp.status}`);
-      const data = await resp.json();
-      const hits = data?.hits?.hits || [];
+      if (!r.ok) throw new Error(`HTTP_${r.status}`);
+      return (await r.json())?.hits?.hits || [];
+    }
+  ];
+
+  for (let i = 0; i < estrategias.length; i++) {
+    try {
+      btnText.textContent = i === 0 ? 'Conectando...' : `Tentativa ${i+1}/3...`;
+      const hits = await Promise.race([
+        estrategias[i](),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 7000))
+      ]);
+
+      // ✅ Sucesso — retorna dados reais
       if (hits.length === 0) {
+        // Processo não encontrado na base real → mock com aviso
         mostrarResultado([djGerarMock(parsed)], true);
       } else {
         mostrarResultado(hits, false);
       }
       btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
       return;
+
     } catch (err) {
-      if (err.message === 'AUTH') {
+      if (err.message === 'AUTH' || err.message === 'HTTP_401' || err.message === 'HTTP_403') {
         document.getElementById('djLoading').classList.remove('show');
         djShowError('🔑 API Key inválida',
-          'Chave rejeitada — verifique em <a href="https://datajud-wiki.cnj.jus.br" target="_blank" style="color:var(--gold)">datajud-wiki.cnj.jus.br</a>. ' +
-          'O modo de demonstração foi ativado abaixo.');
+          'Chave rejeitada pelo DataJud. Verifique em ' +
+          '<a href="https://datajud-wiki.cnj.jus.br" target="_blank" style="color:var(--gold)">datajud-wiki.cnj.jus.br</a>.');
+        btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
+        return;
       }
-      // CORS ou rede → cai no mock silenciosamente
+      // CORS / timeout / rede → tenta próxima estratégia
+      console.log(`[DataJud] Estratégia ${i+1} falhou: ${err.message}. Tentando próxima...`);
     }
   }
 
-  // ── 4C. CONTINGÊNCIA: Mock Inteligente (CORS ou sem apiKey) ──
-  await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+  // ── 4C. CONTINGÊNCIA FINAL: Mock (todas as estratégias falharam) ──────────
+  await new Promise(r => setTimeout(r, 600));
   mostrarResultado([djGerarMock(parsed)], true);
 
   btn.disabled = false;
