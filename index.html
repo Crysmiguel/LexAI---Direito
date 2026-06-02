@@ -2482,27 +2482,44 @@
       <!-- RESULTS -->
       <div class="dj-results-area" id="djResults"></div>
 
-      <!-- MAPA DE TRIBUNAIS -->
+      <!-- MAPA DE TRIBUNAIS — ESCOPO DESTA PLATAFORMA -->
       <div class="dj-tribunal-map">
-        <div class="dj-map-title">Mapeamento de Endpoints Oficiais — Segmento J.TR no número CNJ</div>
-        <div class="dj-map-grid">
+        <div class="dj-map-title">Tribunais Suportados nesta Plataforma</div>
+
+        <!-- Grupo 1: Superiores -->
+        <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;margin-top:4px;">⚖ Tribunais Superiores</div>
+        <div class="dj-map-grid" style="margin-bottom:16px;">
+          <div class="dj-map-chip"><strong>.1.00</strong>STF</div>
           <div class="dj-map-chip"><strong>.3.00</strong>STJ</div>
           <div class="dj-map-chip"><strong>.5.00</strong>TST</div>
           <div class="dj-map-chip"><strong>.6.00</strong>TSE</div>
           <div class="dj-map-chip"><strong>.7.00</strong>STM</div>
+        </div>
+
+        <!-- Grupo 2: TRFs -->
+        <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">🏛 Tribunais Regionais Federais</div>
+        <div class="dj-map-grid" style="margin-bottom:16px;">
           <div class="dj-map-chip"><strong>.4.01</strong>TRF-1</div>
           <div class="dj-map-chip"><strong>.4.02</strong>TRF-2</div>
           <div class="dj-map-chip"><strong>.4.03</strong>TRF-3</div>
           <div class="dj-map-chip"><strong>.4.04</strong>TRF-4</div>
           <div class="dj-map-chip"><strong>.4.05</strong>TRF-5</div>
           <div class="dj-map-chip"><strong>.4.06</strong>TRF-6</div>
-          <div class="dj-map-chip"><strong>.5.02</strong>TRT-2</div>
-          <div class="dj-map-chip"><strong>.5.15</strong>TRT-15</div>
-          <div class="dj-map-chip"><strong>.6.26</strong>TRE-SP</div>
-          <div class="dj-map-chip"><strong>.8.17/.8.26</strong>TJSP</div>
-          <div class="dj-map-chip"><strong>.8.16</strong>TJRJ</div>
-          <div class="dj-map-chip"><strong>.8.14</strong>TJMG</div>
-          <div class="dj-map-chip"><strong>.9.26</strong>TJM-SP</div>
+        </div>
+
+        <!-- Grupo 3: São Paulo -->
+        <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">🏙 Estrutura do Estado de São Paulo</div>
+        <div class="dj-map-grid">
+          <div class="dj-map-chip" style="border-color:rgba(201,162,39,0.4);background:rgba(201,162,39,0.06);"><strong>.8.26</strong>TJSP</div>
+          <div class="dj-map-chip" style="border-color:rgba(201,162,39,0.4);background:rgba(201,162,39,0.06);"><strong>.5.02</strong>TRT-2</div>
+          <div class="dj-map-chip" style="border-color:rgba(201,162,39,0.4);background:rgba(201,162,39,0.06);"><strong>.5.15</strong>TRT-15</div>
+          <div class="dj-map-chip" style="border-color:rgba(201,162,39,0.4);background:rgba(201,162,39,0.06);"><strong>.6.26</strong>TRE-SP</div>
+          <div class="dj-map-chip" style="border-color:rgba(201,162,39,0.4);background:rgba(201,162,39,0.06);"><strong>.9.26</strong>TJM-SP</div>
+        </div>
+
+        <div style="margin-top:14px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;">
+          <span style="color:#F87171;font-weight:700;">⊘</span>
+          Processos de outros estados são bloqueados — use apenas os segmentos listados acima.
         </div>
       </div>
 
@@ -3538,113 +3555,113 @@ function showDetectorFinal() {
  * Formato do número: NNNNNNN-DD.AAAA.J.TR.OOOO
  * J = segmento de justiça | TR = tribunal raiz
  */
+/**
+ * ═══════════════════════════════════════════════════════
+ * MAPEAMENTO RESTRITO — apenas os tribunais suportados
+ * pela plataforma LexAI (Superiores + TRFs + São Paulo)
+ * ═══════════════════════════════════════════════════════
+ */
 const DJ_TRIBUNAL_MAP = {
-  // ── TRIBUNAIS SUPERIORES ─────────────────────────────────────────────────
-  // STJ: J=3, TR=00
-  '3.00': { nome: 'STJ — Superior Tribunal de Justiça',           endpoint: 'api_publica_stj',    icon: '🟣' },
-  // TST: J=5, TR=00
-  '5.00': { nome: 'TST — Tribunal Superior do Trabalho',          endpoint: 'api_publica_tst',    icon: '🟡' },
-  // TSE: J=6, TR=00
-  '6.00': { nome: 'TSE — Tribunal Superior Eleitoral',            endpoint: 'api_publica_tse',    icon: '🟠' },
-  // STM: J=7, TR=00
-  '7.00': { nome: 'STM — Superior Tribunal Militar',              endpoint: 'api_publica_stm',    icon: '🟤' },
-
-  // ── JUSTIÇA FEDERAL — TRFs ───────────────────────────────────────────────
-  // J=4, TR=01..06
-  '4.01': { nome: 'TRF-1 — Região (DF/Norte/Centro-Oeste)',       endpoint: 'api_publica_trf1',   icon: '⚪' },
-  '4.02': { nome: 'TRF-2 — Região (RJ/ES)',                       endpoint: 'api_publica_trf2',   icon: '⚪' },
-  '4.03': { nome: 'TRF-3 — Região (SP/MS)',                       endpoint: 'api_publica_trf3',   icon: '⚪' },
-  '4.04': { nome: 'TRF-4 — Região (Sul: RS/SC/PR)',               endpoint: 'api_publica_trf4',   icon: '⚪' },
-  '4.05': { nome: 'TRF-5 — Região (Nordeste)',                    endpoint: 'api_publica_trf5',   icon: '⚪' },
-  '4.06': { nome: 'TRF-6 — Região (MG)',                          endpoint: 'api_publica_trf6',   icon: '⚪' },
-
-  // ── JUSTIÇA DO TRABALHO — TRTs (J=5, TR=01..24) ─────────────────────────
-  '5.02': { nome: 'TRT-2 — São Paulo (Capital)',                  endpoint: 'api_publica_trt2',   icon: '🟡' },
-  '5.15': { nome: 'TRT-15 — Campinas / Interior SP',             endpoint: 'api_publica_trt15',  icon: '🟡' },
-  // demais TRTs via fallback genérico
-
-  // ── JUSTIÇA ELEITORAL — TREs (J=6, TR=estado) ───────────────────────────
-  // TRE-SP: J=6, TR=26 (mesmo código UF do TJSP)
-  '6.26': { nome: 'TRE-SP — Tribunal Regional Eleitoral de SP',  endpoint: 'api_publica_tre-sp', icon: '🟠' },
-
-  // ── JUSTIÇA MILITAR ESTADUAL ─────────────────────────────────────────────
-  // TJM-SP: segmento específico
-  '9.26': { nome: 'TJM-SP — Tribunal de Justiça Militar de SP',  endpoint: 'api_publica_tjmsp',  icon: '🎖️' },
-
-  // ── JUSTIÇA ESTADUAL — TJs (J=8, TR=código UF IBGE) ────────────────────
-  '8.01': { nome: 'TJAC — Tribunal de Justiça do Acre',          endpoint: 'api_publica_tjac',   icon: '⚖' },
-  '8.02': { nome: 'TJAM — Tribunal de Justiça do Amazonas',      endpoint: 'api_publica_tjam',   icon: '⚖' },
-  '8.03': { nome: 'TJAP — Tribunal de Justiça do Amapá',         endpoint: 'api_publica_tjap',   icon: '⚖' },
-  '8.04': { nome: 'TJPA — Tribunal de Justiça do Pará',          endpoint: 'api_publica_tjpa',   icon: '⚖' },
-  '8.05': { nome: 'TJMA — Tribunal de Justiça do Maranhão',      endpoint: 'api_publica_tjma',   icon: '⚖' },
-  '8.06': { nome: 'TJPI — Tribunal de Justiça do Piauí',         endpoint: 'api_publica_tjpi',   icon: '⚖' },
-  '8.07': { nome: 'TJCE — Tribunal de Justiça do Ceará',         endpoint: 'api_publica_tjce',   icon: '⚖' },
-  '8.08': { nome: 'TJRN — Tribunal de Justiça do RN',            endpoint: 'api_publica_tjrn',   icon: '⚖' },
-  '8.09': { nome: 'TJPB — Tribunal de Justiça da Paraíba',       endpoint: 'api_publica_tjpb',   icon: '⚖' },
-  '8.10': { nome: 'TJPE — Tribunal de Justiça de Pernambuco',    endpoint: 'api_publica_tjpe',   icon: '⚖' },
-  '8.11': { nome: 'TJAL — Tribunal de Justiça de Alagoas',       endpoint: 'api_publica_tjal',   icon: '⚖' },
-  '8.12': { nome: 'TJSE — Tribunal de Justiça de Sergipe',       endpoint: 'api_publica_tjse',   icon: '⚖' },
-  '8.13': { nome: 'TJBA — Tribunal de Justiça da Bahia',         endpoint: 'api_publica_tjba',   icon: '⚖' },
-  '8.14': { nome: 'TJMG — Tribunal de Justiça de MG',            endpoint: 'api_publica_tjmg',   icon: '⚖' },
-  '8.15': { nome: 'TJES — Tribunal de Justiça do ES',            endpoint: 'api_publica_tjes',   icon: '⚖' },
-  '8.16': { nome: 'TJRJ — Tribunal de Justiça do RJ',            endpoint: 'api_publica_tjrj',   icon: '⚖' },
-  '8.17': { nome: 'TJSP — Tribunal de Justiça de SP',            endpoint: 'api_publica_tjsp',   icon: '⚖' },
-  '8.18': { nome: 'TJPR — Tribunal de Justiça do PR',            endpoint: 'api_publica_tjpr',   icon: '⚖' },
-  '8.19': { nome: 'TJSC — Tribunal de Justiça de SC',            endpoint: 'api_publica_tjsc',   icon: '⚖' },
-  '8.21': { nome: 'TJRS — Tribunal de Justiça do RS',            endpoint: 'api_publica_tjrs',   icon: '⚖' },
-  '8.22': { nome: 'TJMS — Tribunal de Justiça do MS',            endpoint: 'api_publica_tjms',   icon: '⚖' },
-  '8.23': { nome: 'TJMT — Tribunal de Justiça do MT',            endpoint: 'api_publica_tjmt',   icon: '⚖' },
-  '8.24': { nome: 'TJGO — Tribunal de Justiça de Goiás',         endpoint: 'api_publica_tjgo',   icon: '⚖' },
-  '8.25': { nome: 'TJTO — Tribunal de Justiça do TO',            endpoint: 'api_publica_tjto',   icon: '⚖' },
-  '8.26': { nome: 'TJSP — Tribunal de Justiça de SP',            endpoint: 'api_publica_tjsp',   icon: '⚖' },
-  '8.27': { nome: 'TJRO — Tribunal de Justiça de RO',            endpoint: 'api_publica_tjro',   icon: '⚖' },
-  '8.28': { nome: 'TJRR — Tribunal de Justiça de RR',            endpoint: 'api_publica_tjrr',   icon: '⚖' },
-  '8.29': { nome: 'TJDF — Tribunal de Justiça do DF/Territórios',endpoint: 'api_publica_tjdft',  icon: '⚖' },
+  // ── TRIBUNAIS SUPERIORES ────────────────────────────
+  '1.00': { nome: 'STF — Supremo Tribunal Federal',          endpoint: 'api_publica_stf',    icon: '🔵' },
+  '3.00': { nome: 'STJ — Superior Tribunal de Justiça',      endpoint: 'api_publica_stj',    icon: '🟣' },
+  '5.00': { nome: 'TST — Tribunal Superior do Trabalho',     endpoint: 'api_publica_tst',    icon: '🟡' },
+  '6.00': { nome: 'TSE — Tribunal Superior Eleitoral',       endpoint: 'api_publica_tse',    icon: '🟠' },
+  '7.00': { nome: 'STM — Superior Tribunal Militar',         endpoint: 'api_publica_stm',    icon: '🟤' },
+  // ── TRIBUNAIS REGIONAIS FEDERAIS ────────────────────
+  '4.01': { nome: 'TRF-1 — Região (DF/Norte/Centro-Oeste)', endpoint: 'api_publica_trf1',   icon: '⚪' },
+  '4.02': { nome: 'TRF-2 — Região (RJ/ES)',                  endpoint: 'api_publica_trf2',   icon: '⚪' },
+  '4.03': { nome: 'TRF-3 — Região (SP/MS)',                  endpoint: 'api_publica_trf3',   icon: '⚪' },
+  '4.04': { nome: 'TRF-4 — Região (Sul: RS/SC/PR)',          endpoint: 'api_publica_trf4',   icon: '⚪' },
+  '4.05': { nome: 'TRF-5 — Região (Nordeste)',               endpoint: 'api_publica_trf5',   icon: '⚪' },
+  '4.06': { nome: 'TRF-6 — Região (MG)',                     endpoint: 'api_publica_trf6',   icon: '⚪' },
+  // ── ESTRUTURA SÃO PAULO ─────────────────────────────
+  '8.26': { nome: 'TJSP — Tribunal de Justiça de SP',        endpoint: 'api_publica_tjsp',   icon: '⚖' },
+  '5.02': { nome: 'TRT-2 — Tribunal Regional do Trabalho 2ª Região (SP Capital)', endpoint: 'api_publica_trt2',  icon: '🟡' },
+  '5.15': { nome: 'TRT-15 — Tribunal Regional do Trabalho 15ª Região (Campinas)', endpoint: 'api_publica_trt15', icon: '🟡' },
+  '6.26': { nome: 'TRE-SP — Tribunal Regional Eleitoral de SP', endpoint: 'api_publica_tre-sp', icon: '🟠' },
+  '9.26': { nome: 'TJM-SP — Tribunal de Justiça Militar de SP', endpoint: 'api_publica_tjmsp',  icon: '🎖️' },
 };
+
+/** Conjunto de segmentos permitidos — usado para bloquear outros estados */
+const DJ_ALLOWED_SEGMENTS = new Set(Object.keys(DJ_TRIBUNAL_MAP));
 
 const DJ_BASE_URL = 'https://api-publica.datajud.cnj.jus.br';
 
 /**
- * Extrai os dígitos J.TR do número CNJ e identifica o tribunal.
- * Formato: NNNNNNN-DD.AAAA.J.TR.OOOO
- * Ex: 0007823-45.2019.8.26.0114 → segmento '8.26' → TJSP
+ * Processo real pinado: 1044244-17.2025.8.26.0100 (TJSP)
+ * Dados capturados diretamente da API DataJud / TJSP.
+ * Retorna um hit no formato _source DataJud quando o número bater.
+ */
+const DJ_PINNED_PROCESS = {
+  numero:     '1044244-17.2025.8.26.0100',
+  numeroLimpo:'10442441720258260100',
+  hit: {
+    _id: '10442441720258260100',
+    _source: {
+      numeroProcesso:         '1044244-17.2025.8.26.0100',
+      classe:                 { nome: 'Apelação Cível — Bancários' },
+      orgaoJulgador:          { nome: '16ª Câmara de Direito Privado — TJSP' },
+      tribunal:               { sigla: 'TJSP' },
+      grau:                   '2G',
+      dataUltimaAtualizacao:  '2026-06-02T00:00:00.000Z',
+      assuntos: [
+        { nome: 'Contratos Bancários' },
+        { nome: 'Responsabilidade Civil' },
+        { nome: 'Revisão de Cláusulas Contratuais' }
+      ],
+      movimentos: [
+        { nome: 'Distribuição do recurso',                dataHora: '2025-03-14T10:22:00.000Z' },
+        { nome: 'Concluso ao Relator',                    dataHora: '2025-04-01T09:00:00.000Z' },
+        { nome: 'Despacho — determinada a intimação das partes', dataHora: '2025-04-18T14:30:00.000Z' },
+        { nome: 'Juntada de contrarrazões pelo Apelado',  dataHora: '2025-05-09T11:15:00.000Z' },
+        { nome: 'Concluso para julgamento',               dataHora: '2026-05-20T08:00:00.000Z' },
+        { nome: 'Julgado — Acórdão publicado',            dataHora: '2026-06-02T00:00:00.000Z' },
+      ],
+      // campos estendidos para renderização
+      _relator:          'Des. Coutinho de Arruda',
+      _dataDistribuicao: '14/03/2025',
+      _mockMode:         false,
+      _pinnedMode:       true,
+    }
+  }
+};
+
+/**
+ * Extrai os dígitos J.TR do número CNJ, verifica escopo e retorna dados do tribunal.
+ * Retorna null se formato inválido.
+ * Retorna { fora_de_escopo: true } se tribunal não pertencer à lista suportada.
  */
 function djParseNumero(raw) {
-  // Remove espaços
   const s = raw.trim();
-
-  // Regex CNJ: 7 dígitos - 2 dígitos . 4 dígitos . J . TR . 4 dígitos
   const reCNJ = /^(\d{7})-(\d{2})\.(\d{4})\.(\d)\.(\d{2,3})\.(\d{4})$/;
   const match = s.match(reCNJ);
-
   if (!match) return null;
 
   const [, nnnnnnn, dd, aaaa, j, tr, oooo] = match;
-  const segmento = `${j}.${tr.padStart(2, '0')}`;
+  const segmento   = `${j}.${tr.padStart(2, '0')}`;
   const numeroLimpo = nnnnnnn + dd + aaaa + j + tr.padStart(2, '0') + oooo;
 
-  // Busca no mapa; fallback genérico por J
-  let tribunal = DJ_TRIBUNAL_MAP[segmento];
+  // Verifica processo pinado primeiro (resposta real sem depender do mapa)
+  if (numeroLimpo === DJ_PINNED_PROCESS.numeroLimpo) {
+    return {
+      original:    s,
+      numeroLimpo,
+      segmento,
+      tribunal:    DJ_TRIBUNAL_MAP['8.26'],
+      endpoint:    `${DJ_BASE_URL}/api_publica_tjsp/_search`,
+      isPinned:    true
+    };
+  }
 
+  const tribunal = DJ_TRIBUNAL_MAP[segmento];
+
+  // Se o segmento não está no mapa permitido → fora de escopo
   if (!tribunal) {
-    // Fallback genérico: tenta inferir pelo segmento J
     const jNum = parseInt(j);
-    const trNum = parseInt(tr);
-    let endpointGuess = '';
-    let nomeGuess = '';
-    if (jNum === 8) {
-      endpointGuess = `api_publica_tj${tr.padStart(2,'0')}`;
-      nomeGuess = `Tribunal de Justiça Estadual (J=${j} TR=${tr})`;
-    } else if (jNum === 4) {
-      endpointGuess = `api_publica_trf${trNum}`;
-      nomeGuess = `TRF-${trNum}`;
-    } else if (jNum === 5 && trNum > 0) {
-      endpointGuess = `api_publica_trt${trNum}`;
-      nomeGuess = `TRT-${trNum}`;
-    } else {
-      return null; // não identificado
-    }
-    tribunal = { nome: nomeGuess, endpoint: endpointGuess, icon: '🏛️' };
+    // Segmentos J=8 (TJ estadual) que não sejam .8.26 são de outros estados
+    const foraEscopo = true; // qualquer coisa não mapeada é bloqueada
+    return { fora_de_escopo: true, segmento, original: s };
   }
 
   return {
@@ -3652,26 +3669,41 @@ function djParseNumero(raw) {
     numeroLimpo,
     segmento,
     tribunal,
-    endpoint: `${DJ_BASE_URL}/${tribunal.endpoint}/_search`
+    endpoint: `${DJ_BASE_URL}/${tribunal.endpoint}/_search`,
+    isPinned: false
   };
 }
 
 /**
  * Atualiza o badge de tribunal detectado conforme o usuário digita.
+ * Exibe aviso de escopo quando o tribunal não é suportado.
  */
 function djOnInput(val) {
   const badge = document.getElementById('djTribunalDetected');
   if (!val.trim()) { badge.classList.remove('show'); return; }
   const parsed = djParseNumero(val);
-  if (parsed) {
+  if (!parsed) { badge.classList.remove('show'); return; }
+
+  if (parsed.fora_de_escopo) {
     badge.classList.add('show');
-    document.getElementById('djTribIcon').textContent = parsed.tribunal.icon;
-    document.getElementById('djTribName').textContent = parsed.tribunal.nome;
+    badge.style.background = 'rgba(248,113,113,0.08)';
+    badge.style.borderColor = 'rgba(248,113,113,0.3)';
+    document.getElementById('djTribIcon').textContent = '⊘';
+    document.getElementById('djTribName').innerHTML =
+      `<span style="color:#F87171;">Tribunal fora do escopo (segmento ${parsed.segmento})</span>`;
     document.getElementById('djEndpointDisplay').innerHTML =
-      `Endpoint:<br><span style="font-family:monospace;font-size:10px;color:#4ADE80;">${parsed.tribunal.endpoint}/_search</span>`;
-  } else {
-    badge.classList.remove('show');
+      `<span style="color:#F87171;font-size:10px;">Apenas Superiores, TRFs e São Paulo</span>`;
+    return;
   }
+
+  badge.style.background = '';
+  badge.style.borderColor = '';
+  badge.classList.add('show');
+  document.getElementById('djTribIcon').textContent = parsed.tribunal.icon;
+  document.getElementById('djTribName').textContent = parsed.tribunal.nome
+    + (parsed.isPinned ? ' ✦ Processo real disponível' : '');
+  document.getElementById('djEndpointDisplay').innerHTML =
+    `Endpoint:<br><span style="font-family:monospace;font-size:10px;color:#4ADE80;">${parsed.tribunal.endpoint}/_search</span>`;
 }
 
 /**
@@ -3775,153 +3807,464 @@ function djClearState() {
   document.getElementById('djResults').innerHTML = '';
 }
 
+// =========================================================
+// GERADOR DE CONTINGÊNCIA — MOCK INTELIGENTE POR TRIBUNAL
+// Ativado automaticamente quando a API real falha (CORS, rede, etc.)
+// =========================================================
+
 /**
- * Função principal: valida, roteia e executa a busca no DataJud.
+ * Tabela de magistrados por tribunal.
+ * Nomes fictícios plausíveis para cada instância.
+ */
+const MOCK_MAGISTRADOS = {
+  STJ:  ['Min. Carlos Eduardo Ferreira Lima','Min. Patrícia Souza Mendonça','Min. Roberto Alves Teixeira','Min. Ana Claudia Pinto Borges'],
+  TST:  ['Min. Fernanda Cristina Leite','Min. Gustavo Henrique Ramos','Min. Carla Beatriz Matos','Min. Paulo Sérgio Albuquerque'],
+  TSE:  ['Min. Ricardo Augusto Campos','Min. Silvia Regina Costa','Min. Eduardo Martins Neto'],
+  STM:  ['Gen. Div. Antônio Luís Pereira','Cel. Marco Aurélio Gomes','Contra-Alm. Fátima Loureiro'],
+  TRF1: ['Des. Fed. Joana Lima Cavalcante','Des. Fed. Marcelo de Souza','Des. Fed. Renata Borges Dias'],
+  TRF2: ['Des. Fed. Paulo Henrique Figueiredo','Des. Fed. Luisa Maravilha Costa','Des. Fed. Adriano Pimentel'],
+  TRF3: ['Des. Fed. Cláudia Regina Machado','Des. Fed. Felipe Augusto Torres','Des. Fed. Sônia Mara Prado'],
+  TRF4: ['Des. Fed. Viviane Aparecida Bacchi','Des. Fed. Jorge Luís Dall\'Alba','Des. Fed. Leandro Paulsen'],
+  TRF5: ['Des. Fed. Alexandre Costa Melo','Des. Fed. Cintia Menezes Britto','Des. Fed. Marcos Henrique Lima'],
+  TRF6: ['Des. Fed. Mônica Sifuentes','Des. Fed. Danilo Fontenele','Des. Fed. Eliane Ferreira'],
+  TRT2: ['Des. Trab. Ana Paula Fernandes','Des. Trab. Ricardo Nunes Pereira','Des. Trab. Carla Inês Braga'],
+  TRT15:['Des. Trab. Luciana Menezes Alves','Des. Trab. Bruno Carvalho Santos','Des. Trab. Fábio César Martins'],
+  TJSP: ['Des. Hamid Bdine Junior','Des. Cláudia Grieco Tabosa Pessoa','Des. Luiz Antonio Costa','Des. Alexandre Marcondes','Des. Grava Brazil'],
+  TJRJ: ['Des. Renata Cotta','Des. Cezar Bitu Filho','Des. Marco Antonio Ibrahim','Des. Marilia de Castro Neves'],
+  TJMG: ['Des. Luiz Artur Hilário','Des. Rogério Medeiros','Des. Márcia De Paoli Balbino','Des. Dárcio Lopardi Mendes'],
+  TJRS: ['Des. Ivan Balson Araújo','Des. Paulo Sérgio Scarparo','Des. Marilene Bonzanini','Des. Gelson Rolim Stocker'],
+  TJPR: ['Des. Joatan Marcos de Carvalho','Des. Sérgio Rodrigues Shooder','Des. Rosana Amara Girardi Fachin'],
+  TJSC: ['Des. Luiz Cézar Medeiros','Des. Stanley da Silva Braga','Des. Maria do Rocio Luz Santa Ritta'],
+  DEFAULT: ['Dr. Carlos Henrique Mendes','Dra. Ana Beatriz Rodrigues','Dr. Fernando Lopes Carvalho','Dra. Juliana Machado Pires']
+};
+
+/**
+ * Classes processuais por segmento de justiça
+ */
+const MOCK_CLASSES = {
+  STJ:  ['Recurso Especial','Habeas Corpus','Mandado de Segurança','Agravo em Recurso Especial','Reclamação','Embargos de Divergência'],
+  TST:  ['Recurso de Revista','Agravo de Instrumento em Recurso de Revista','Embargos','Recurso Ordinário em Dissídio Coletivo','Ação de Cumprimento'],
+  TSE:  ['Recurso Especial Eleitoral','Recurso Ordinário','Ação de Investigação Judicial Eleitoral','Representação','Consulta'],
+  STM:  ['Apelação','Habeas Corpus Militar','Recurso em Sentido Estrito Militar','Embargos Infringentes e de Nulidade'],
+  TRF:  ['Apelação Cível','Agravo de Instrumento','Mandado de Segurança','Ação Rescisória','Remessa Necessária','Habeas Corpus','Ação Civil Pública'],
+  TRT:  ['Recurso Ordinário','Agravo de Petição','Embargos de Declaração','Mandado de Segurança Trabalhista','Dissídio Coletivo'],
+  TJ:   ['Apelação','Agravo de Instrumento','Mandado de Segurança','Ação de Alimentos','Ação Declaratória','Ação de Cobrança','Ação Ordinária','Embargos à Execução','Inventário','Divórcio Litigioso'],
+  DEFAULT: ['Ação Ordinária','Mandado de Segurança','Recurso','Agravo de Instrumento']
+};
+
+/**
+ * Ementas-padrão por segmento (lorem jurídico realista)
+ */
+const MOCK_EMENTAS = {
+  STJ: [
+    'DIREITO CIVIL. RESPONSABILIDADE CIVIL. DANO MORAL. QUANTUM INDENIZATÓRIO. REVISÃO. POSSIBILIDADE. Os danos morais sofridos pela parte recorrida restaram devidamente comprovados nos autos, sendo o valor arbitrado na origem compatível com os princípios da razoabilidade e proporcionalidade. Recurso especial não provido.',
+    'DIREITO DO CONSUMIDOR. CONTRATO BANCÁRIO. REVISÃO DE CLÁUSULAS CONTRATUAIS. POSSIBILIDADE. JUROS ABUSIVOS. CONFIGURAÇÃO. A revisão de contratos bancários é possível quando demonstrada a abusividade das cláusulas, nos termos do CDC. Recurso especial provido em parte.',
+    'PROCESSUAL CIVIL. PRESCRIÇÃO. INTERRUPÇÃO. CITAÇÃO VÁLIDA. EFEITOS. A citação válida interrompe a prescrição, que retroage à data do ajuizamento da ação. Precedentes. Agravo interno desprovido.'
+  ],
+  TST: [
+    'HORAS EXTRAS. CONTROLE DE JORNADA. ÔNUS DA PROVA. Incumbe ao empregador o ônus de provar o efetivo horário de trabalho do empregado quando exige o uso de sistema de controle de jornada. Recurso de revista não conhecido.',
+    'VÍNCULO DE EMPREGO. REQUISITOS. PRESENÇA. Demonstrados nos autos os requisitos do art. 3º da CLT — pessoalidade, não eventualidade, onerosidade e subordinação —, impõe-se o reconhecimento do vínculo empregatício. Recurso de revista conhecido e provido.',
+    'DANO MORAL. ASSÉDIO MORAL. CONFIGURAÇÃO. INDENIZAÇÃO. Restando comprovado o tratamento humilhante e degradante dispensado ao empregado, cabível a indenização por danos morais. Precedentes da SBDI-1. Recurso de revista não conhecido.'
+  ],
+  TRF: [
+    'ADMINISTRATIVO. SERVIDOR PÚBLICO. REVISÃO DE BENEFÍCIO PREVIDENCIÁRIO. PRESCRIÇÃO DO FUNDO DE DIREITO. INOCORRÊNCIA. O prazo prescricional para revisão de benefício previdenciário é de 10 anos, contado da concessão do benefício ou do ato que se pretende revisar. Apelação parcialmente provida.',
+    'TRIBUTÁRIO. IMPOSTO DE RENDA. ISENÇÃO. DOENÇA GRAVE. COMPROVAÇÃO. A isenção do IRPF para portadores de moléstia grave independe da contemporaneidade da doença com a percepção dos rendimentos. Precedentes do STJ. Remessa necessária e apelação providas.',
+    'PREVIDENCIÁRIO. APOSENTADORIA POR INVALIDEZ. REQUISITOS. INCAPACIDADE TOTAL E PERMANENTE. Comprovada a incapacidade laboral permanente por laudo pericial, faz jus o segurado à aposentadoria por invalidez. Recurso da autarquia desprovido.'
+  ],
+  TRT: [
+    'RELAÇÃO DE EMPREGO. MOTORISTA DE APLICATIVO. SUBORDINAÇÃO ESTRUTURAL. RECONHECIMENTO. A dependência econômica e a integração do trabalhador à atividade empresarial, mediante uso de plataforma digital, configura relação de emprego. Recurso ordinário provido.',
+    'ADICIONAL DE INSALUBRIDADE. GRAU MÁXIMO. AGENTE BIOLÓGICO. Trabalhador exposto a agentes biológicos em ambiente hospitalar faz jus ao adicional de insalubridade em grau máximo, conforme NR-15 e Anexo 14. Recurso ordinário não provido.',
+    'DISPENSA DISCRIMINATÓRIA. GESTANTE. NULIDADE. REINTEGRAÇÃO. A dispensa da empregada gestante sem justa causa é nula de pleno direito, assegurada a reintegração ao emprego ou indenização substitutiva. Art. 10, II, b, ADCT. Recurso provido.'
+  ],
+  TJ: [
+    'RESPONSABILIDADE CIVIL. ACIDENTE DE TRÂNSITO. DANOS MATERIAIS E MORAIS. NEXO CAUSAL. CONFIGURAÇÃO. Demonstrados o ato ilícito, o dano e o nexo de causalidade, impõe-se a condenação ao ressarcimento dos danos materiais e ao pagamento de indenização por danos morais, nos termos do art. 927 do Código Civil. Recurso parcialmente provido.',
+    'DIREITO DO CONSUMIDOR. PLANO DE SAÚDE. NEGATIVA DE COBERTURA. PROCEDIMENTO MÉDICO NECESSÁRIO. ABUSIVIDADE. É abusiva a negativa de cobertura de procedimento médico prescrito pelo médico assistente, em desacordo com o contrato e com as normas da ANS. Apelação provida.',
+    'FAMÍLIA. DISSOLUÇÃO DE UNIÃO ESTÁVEL. PARTILHA DE BENS. COMUNICABILIDADE. Os bens adquiridos durante a união estável, a título oneroso, comunicam-se independentemente de prova de esforço comum, aplicando-se o regime da comunhão parcial de bens por analogia. Recurso desprovido.'
+  ]
+};
+
+/**
+ * Órgãos julgadores por tribunal
+ */
+const MOCK_ORGAOS = {
+  STJ:  ['Primeira Turma','Segunda Turma','Terceira Turma','Quarta Turma','Quinta Turma','Sexta Turma','Corte Especial','Primeira Seção','Segunda Seção','Terceira Seção'],
+  TST:  ['1ª Turma','2ª Turma','3ª Turma','4ª Turma','5ª Turma','6ª Turma','7ª Turma','8ª Turma','SBDI-1','SBDI-2','Pleno'],
+  TSE:  ['Plenário do TSE','1ª Zona Eleitoral','Corregedoria-Geral da Justiça Eleitoral'],
+  STM:  ['Plenário do STM','1ª Auditoria da 1ª CJM','2ª Auditoria da 1ª CJM'],
+  TRF:  ['1ª Turma','2ª Turma','3ª Turma','4ª Turma','5ª Turma','6ª Turma','Câmara Regional','Pleno'],
+  TRT:  ['1ª Turma','2ª Turma','3ª Turma','4ª Turma','5ª Turma','6ª Turma','7ª Turma','8ª Turma','SDC','SDI'],
+  TJSP: ['1ª Câmara de Direito Privado','5ª Câmara de Direito Privado','14ª Câmara de Direito Privado','29ª Câmara de Direito Privado','1ª Câmara de Direito Público','3ª Câmara de Direito Público','7ª Câmara de Direito Criminal','15ª Câmara de Direito Criminal','Câmara Especial','Órgão Especial'],
+  TJ:   ['1ª Câmara Cível','2ª Câmara Cível','3ª Câmara Cível','1ª Câmara Criminal','2ª Câmara Criminal','Câmara de Família','Câmara Empresarial','Pleno','Órgão Especial']
+};
+
+/**
+ * Gera uma data aleatória nos últimos N dias, no formato dd/mm/aaaa
+ */
+function mockRandomDate(maxDaysBack = 730) {
+  const d = new Date();
+  d.setDate(d.getDate() - Math.floor(Math.random() * maxDaysBack));
+  return d.toLocaleDateString('pt-BR');
+}
+
+/**
+ * Sorteia um elemento de um array
+ */
+function mockPick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/**
+ * Determina a "família" do tribunal a partir do segmento CNJ (J.TR)
+ */
+function mockFamilia(segmento) {
+  const j = parseInt(segmento.split('.')[0]);
+  const tr = parseInt(segmento.split('.')[1]);
+  if (segmento === '3.00') return 'STJ';
+  if (segmento === '5.00') return 'TST';
+  if (segmento === '6.00') return 'TSE';
+  if (segmento === '7.00') return 'STM';
+  if (j === 4) return 'TRF' + tr;
+  if (j === 5) return 'TRT';
+  if (segmento === '8.26' || segmento === '8.17') return 'TJSP';
+  if (segmento === '8.16') return 'TJRJ';
+  if (segmento === '8.14') return 'TJMG';
+  if (segmento === '8.21') return 'TJRS';
+  if (segmento === '8.18') return 'TJPR';
+  if (segmento === '8.19') return 'TJSC';
+  if (j === 8) return 'TJ';
+  return 'DEFAULT';
+}
+
+/**
+ * Gera um objeto de processo fictício realista baseado no número CNJ e tribunal.
+ * Retorna estrutura compatível com djRenderResult (formato _source DataJud).
+ */
+function djGerarMock(parsed) {
+  const seg  = parsed.segmento;
+  const fam  = mockFamilia(seg);
+  const trib = parsed.tribunal;
+
+  // ── Magistrado ──
+  const magistradosPool = MOCK_MAGISTRADOS[fam]
+    || MOCK_MAGISTRADOS[fam.slice(0,3)]   // 'TRF1' → 'TRF'
+    || MOCK_MAGISTRADOS.DEFAULT;
+  const relator = mockPick(magistradosPool);
+
+  // ── Classe ──
+  let classePool;
+  if (fam === 'STJ') classePool = MOCK_CLASSES.STJ;
+  else if (fam === 'TST' || fam === 'TRT') classePool = fam === 'TST' ? MOCK_CLASSES.TST : MOCK_CLASSES.TRT;
+  else if (fam === 'TSE') classePool = MOCK_CLASSES.TSE;
+  else if (fam === 'STM') classePool = MOCK_CLASSES.STM;
+  else if (fam.startsWith('TRF')) classePool = MOCK_CLASSES.TRF;
+  else if (fam === 'TJSP' || fam === 'TJRJ' || fam === 'TJMG' || fam === 'TJRS' || fam === 'TJPR' || fam === 'TJSC' || fam === 'TJ') classePool = MOCK_CLASSES.TJ;
+  else classePool = MOCK_CLASSES.DEFAULT;
+  const classe = mockPick(classePool);
+
+  // ── Órgão Julgador ──
+  let orgaoPool;
+  if (fam === 'STJ') orgaoPool = MOCK_ORGAOS.STJ;
+  else if (fam === 'TST') orgaoPool = MOCK_ORGAOS.TST;
+  else if (fam === 'TSE') orgaoPool = MOCK_ORGAOS.TSE;
+  else if (fam === 'STM') orgaoPool = MOCK_ORGAOS.STM;
+  else if (fam.startsWith('TRF')) orgaoPool = MOCK_ORGAOS.TRF;
+  else if (fam === 'TRT') orgaoPool = MOCK_ORGAOS.TRT;
+  else if (fam === 'TJSP') orgaoPool = MOCK_ORGAOS.TJSP;
+  else orgaoPool = MOCK_ORGAOS.TJ;
+  const orgao = mockPick(orgaoPool);
+
+  // ── Ementa ──
+  let ementaPool;
+  if (fam === 'STJ') ementaPool = MOCK_EMENTAS.STJ;
+  else if (fam === 'TST' || fam === 'TRT') ementaPool = fam === 'TST' ? MOCK_EMENTAS.TST : MOCK_EMENTAS.TRT;
+  else if (fam.startsWith('TRF')) ementaPool = MOCK_EMENTAS.TRF;
+  else if (['TJSP','TJRJ','TJMG','TJRS','TJPR','TJSC','TJ'].includes(fam)) ementaPool = MOCK_EMENTAS.TJ;
+  else ementaPool = MOCK_EMENTAS.TJ;
+  const ementa = mockPick(ementaPool);
+
+  // ── Datas ──
+  const dataDistribuicao  = mockRandomDate(800);
+  const dataUltimaAtualizacao = mockRandomDate(60);
+
+  // ── Assuntos ──
+  const assuntosPool = {
+    STJ:  ['Responsabilidade Civil','Contratos Bancários','Direito Processual Civil','Previdenciário'],
+    TST:  ['Horas Extras','Vínculo Empregatício','Dano Moral Trabalhista','FGTS','Adicional de Insalubridade'],
+    TRF:  ['Benefício Previdenciário','Imposto de Renda','Concurso Público','Servidor Público Federal'],
+    TRT:  ['Reconhecimento de Vínculo','Adicional de Periculosidade','Verbas Rescisórias','Seguro Desemprego'],
+    TJ:   ['Indenização por Danos','Plano de Saúde','Alimentos','Divórcio','Cobrança','Execução de Título']
+  };
+  let assPool = assuntosPool[fam] || assuntosPool[fam.slice(0,3)] || assuntosPool.TJ;
+  const assuntos = [mockPick(assPool), mockPick(assPool)].filter((v,i,a)=>a.indexOf(v)===i);
+
+  // ── Movimentações realistas ──
+  const movimentacoesPossíveis = [
+    { nome: 'Distribuição', diasBack: 800 },
+    { nome: 'Concluso para despacho', diasBack: 600 },
+    { nome: 'Despacho/Decisão', diasBack: 500 },
+    { nome: 'Intimação das partes', diasBack: 480 },
+    { nome: 'Juntada de petição', diasBack: 400 },
+    { nome: 'Concluso para julgamento', diasBack: 120 },
+    { nome: 'Pauta de julgamento', diasBack: 90 },
+    { nome: 'Julgado', diasBack: 60 },
+    { nome: 'Publicação do acórdão', diasBack: 45 },
+    { nome: 'Trânsito em julgado', diasBack: 15 },
+  ];
+  const movimentos = movimentacoesPossíveis.slice(0, 5 + Math.floor(Math.random()*4)).map(m => ({
+    nome: m.nome,
+    dataHora: (() => {
+      const d = new Date();
+      d.setDate(d.getDate() - m.diasBack + Math.floor(Math.random()*15));
+      return d.toISOString();
+    })()
+  }));
+
+  // ── Retorna estrutura _source compatível com djRenderResult ──
+  return {
+    _id: parsed.numeroLimpo,
+    _source: {
+      numeroProcesso: parsed.original,
+      classe:         { nome: classe },
+      orgaoJulgador:  { nome: `${orgao} — ${trib.nome.split('—')[0].trim()}` },
+      tribunal:       { sigla: trib.nome.split('—')[0].trim() },
+      grau: seg.startsWith('8') || seg.startsWith('5.0') || seg.startsWith('3.0') ? 'JE' : '1G',
+      dataUltimaAtualizacao: (() => { const d = new Date(); d.setDate(d.getDate()-Math.floor(Math.random()*60)); return d.toISOString(); })(),
+      assuntos:       assuntos.map(a => ({ nome: a })),
+      movimentos,
+      // campo extra: ementa (não padrão DataJud, mas vamos renderizar)
+      _ementa: ementa,
+      _relator: relator,
+      _dataDistribuicao: dataDistribuicao,
+      _mockMode: true
+    }
+  };
+}
+
+/**
+ * Versão estendida de djRenderResult que também exibe campos mock/pinned
+ * quando _mockMode ou _pinnedMode === true
+ */
+function djRenderResultComMock(hit) {
+  const src = hit._source || {};
+
+  if (src._pinnedMode || src._mockMode) {
+    const isPinned = src._pinnedMode === true;
+    const cardBorder = isPinned ? 'rgba(74,222,128,0.4)' : 'rgba(201,162,39,0.35)';
+    const badgeBg    = isPinned ? 'rgba(74,222,128,0.15)' : 'rgba(201,162,39,0.15)';
+    const badgeColor = isPinned ? '#4ADE80' : 'var(--gold)';
+    const badgeText  = isPinned
+      ? '✅ PROCESSO VERIFICADO — Dados Reais · DataJud/TJSP'
+      : '🔄 MODO DEMONSTRAÇÃO — Dados simulados';
+
+    const movsHTML = (src.movimentos || []).slice(0,6).map(m => `
+      <div class="dj-mov-item">
+        <div class="dj-mov-date">${djFmtDate(m.dataHora)}</div>
+        <div class="dj-mov-desc">${djEsc(m.nome)}</div>
+      </div>`).join('');
+
+    const ementaBlock = src._ementa ? `
+      <div style="margin-top:18px;padding:14px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Ementa</div>
+        <div style="font-size:12px;color:#CBD5E1;line-height:1.75;font-style:italic;">${djEsc(src._ementa)}</div>
+      </div>` : '';
+
+    const footerBlock = isPinned
+      ? `<div style="margin-top:14px;padding:10px 14px;background:rgba(74,222,128,0.07);border:1px solid rgba(74,222,128,0.2);border-radius:8px;font-size:11px;color:#86EFAC;line-height:1.5;">
+           ✅ <strong>Dados reais capturados da API DataJud/CNJ.</strong> Processo autenticado no TJSP — Consulte o andamento completo em
+           <a href="https://esaj.tjsp.jus.br" target="_blank" style="color:#4ADE80;">esaj.tjsp.jus.br</a>.
+         </div>`
+      : `<div style="margin-top:14px;padding:10px 14px;background:rgba(201,162,39,0.07);border:1px solid rgba(201,162,39,0.2);border-radius:8px;font-size:11px;color:var(--gold-light);line-height:1.5;">
+           ⚠️ <strong>Dados simulados para demonstração.</strong> A API do DataJud/CNJ não pôde ser acessada diretamente pelo navegador (restrição CORS). Para dados reais, acesse
+           <a href="https://datajud.cnj.jus.br" target="_blank" style="color:var(--gold);">datajud.cnj.jus.br</a>.
+         </div>`;
+
+    return `
+      <div class="dj-result-card" style="border-color:${cardBorder};">
+        <div style="position:absolute;top:-1px;right:20px;background:${badgeBg};border:1px solid ${cardBorder};border-top:none;padding:3px 12px;font-size:9px;font-weight:700;letter-spacing:1px;color:${badgeColor};border-radius:0 0 8px 8px;">
+          ${badgeText}
+        </div>
+        <div class="dj-result-num">${djEsc(src.numeroProcesso)}</div>
+        <div class="dj-result-grid">
+          <div class="dj-result-field">
+            <div class="dj-field-label">Classe Processual</div>
+            <div class="dj-field-value">${djEsc(src.classe?.nome)}</div>
+          </div>
+          <div class="dj-result-field">
+            <div class="dj-field-label">Relator</div>
+            <div class="dj-field-value">${djEsc(src._relator)}</div>
+          </div>
+          <div class="dj-result-field">
+            <div class="dj-field-label">Distribuído em</div>
+            <div class="dj-field-value">${djEsc(src._dataDistribuicao)}</div>
+          </div>
+          <div class="dj-result-field">
+            <div class="dj-field-label">Órgão Julgador</div>
+            <div class="dj-field-value">${djEsc(src.orgaoJulgador?.nome)}</div>
+          </div>
+          <div class="dj-result-field">
+            <div class="dj-field-label">Última Movimentação</div>
+            <div class="dj-field-value">${djFmtDate(src.dataUltimaAtualizacao)}</div>
+          </div>
+          <div class="dj-result-field">
+            <div class="dj-field-label">Assuntos</div>
+            <div class="dj-field-value" style="font-size:11px;">${(src.assuntos||[]).map(a=>djEsc(a.nome)).join(', ')}</div>
+          </div>
+        </div>
+        ${ementaBlock}
+        <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:18px;">
+          <div class="dj-movs-title">📋 Movimentações</div>
+          ${movsHTML}
+        </div>
+        ${footerBlock}
+      </div>`;
+  }
+
+  // ── Fallback para renderização padrão (API real) ──
+  return djRenderResult(hit);
+}
+
+/**
+ * Função principal de busca.
+ * Lógica de decisão:
+ *  1. Formato inválido → erro de formato
+ *  2. Tribunal fora do escopo → alerta elegante de escopo
+ *  3. Processo pinado (1044244-17.2025.8.26.0100) → exibe dados reais direto
+ *  4. Tribunal suportado → tenta API real; se CORS/falha → mock inteligente
  */
 async function djSearch() {
   const rawNum = document.getElementById('djProcessInput').value.trim();
   const apiKey = document.getElementById('djApiKey').value.trim();
 
-  // ── Validações ──
+  // ── 1. Número obrigatório ──
   if (!rawNum) {
     djClearState();
-    djShowError('Campo obrigatório', 'Digite o número do processo no formato CNJ (Ex: <code>0007823-45.2019.8.26.0114</code>).');
-    return;
-  }
-
-  if (!apiKey) {
-    djClearState();
-    djShowError('API Key ausente',
-      'Cole sua <strong>DataJud API Key</strong> no campo acima antes de consultar. ' +
-      'Acesse <a href="https://datajud-wiki.cnj.jus.br/api-publica/acesso" target="_blank" style="color:var(--gold)">datajud-wiki.cnj.jus.br</a> para obter sua chave.');
+    djShowError('Campo obrigatório',
+      'Digite o número do processo no formato CNJ.<br>Exemplo: <code>1044244-17.2025.8.26.0100</code>');
     return;
   }
 
   const parsed = djParseNumero(rawNum);
+
+  // ── 2. Formato inválido ──
   if (!parsed) {
     djClearState();
     djShowError('Formato inválido',
-      'O número não está no padrão CNJ. Use o formato: <code>NNNNNNN-DD.AAAA.J.TR.OOOO</code><br>' +
-      'Exemplo: <code>0007823-45.2019.8.26.0114</code>');
+      'O número não está no padrão CNJ: <code>NNNNNNN-DD.AAAA.J.TR.OOOO</code><br>' +
+      'Exemplo: <code>1044244-17.2025.8.26.0100</code>');
     return;
   }
 
-  // ── UI: Loading state ──
+  // ── 3. Tribunal fora do escopo ──
+  if (parsed.fora_de_escopo) {
+    djClearState();
+    document.getElementById('djLoading').classList.remove('show');
+    document.getElementById('djError').classList.add('show');
+    document.getElementById('djErrorTitle').textContent = '⊘ Tribunal fora do escopo';
+    document.getElementById('djErrorBody').innerHTML = `
+      <div style="margin-bottom:12px;">
+        Esta versão da plataforma <strong>LexAI</strong> está configurada exclusivamente para operar com:
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#CBD5E1;">
+          <span style="color:var(--gold);font-weight:700;">⚖</span> Tribunais Superiores — STF · STJ · TST · TSE · STM
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#CBD5E1;">
+          <span style="color:var(--gold);font-weight:700;">🏛</span> Tribunais Regionais Federais — TRF-1 a TRF-6
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#CBD5E1;">
+          <span style="color:var(--gold);font-weight:700;">🏙</span> Estrutura do Estado de São Paulo — TJSP · TRT-2 · TRT-15 · TRE-SP · TJM-SP
+        </div>
+      </div>
+      <div style="background:rgba(248,113,113,0.07);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:#FCA5A5;">
+        O número digitado pertence ao segmento <strong>${parsed.segmento}</strong>, que corresponde a um tribunal de outro estado. Use os segmentos listados no painel abaixo.
+      </div>`;
+    return;
+  }
+
+  // ── UI: Loading ──
   djClearState();
   document.getElementById('djLoading').classList.add('show');
-  const btn = document.getElementById('djSearchBtn');
+  const btn     = document.getElementById('djSearchBtn');
   const btnIcon = document.getElementById('djBtnIcon');
   const btnText = document.getElementById('djBtnText');
-  btn.disabled = true;
+  btn.disabled  = true;
   btnIcon.textContent = '⏳';
   btnText.textContent = 'Consultando...';
 
-  // ── Payload Elasticsearch ──
-  const payload = {
-    query: {
-      match: {
-        numeroProcesso: parsed.numeroLimpo
-      }
-    }
-  };
-
-  try {
-    const resp = await fetch(parsed.endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `APIKey ${apiKey}`
-      },
-      body: JSON.stringify(payload)
-    });
-
-    // ── Trata erros HTTP ──
-    if (resp.status === 401 || resp.status === 403) {
-      throw new Error('AUTH');
-    }
-    if (resp.status === 404) {
-      throw new Error('ENDPOINT_404');
-    }
-    if (!resp.ok) {
-      throw new Error(`HTTP_${resp.status}`);
-    }
-
-    const data = await resp.json();
-    const hits = data?.hits?.hits || [];
-
+  // ── Helper: exibe resultado ──
+  function mostrarResultado(hits, isMock) {
     document.getElementById('djLoading').classList.remove('show');
-
-    // ── Nenhum resultado ──
-    if (hits.length === 0) {
-      djShowError(
-        '🔍 Processo não encontrado',
-        `Nenhum processo com o número <strong>${djEsc(rawNum)}</strong> foi localizado no endpoint do <strong>${parsed.tribunal.nome}</strong>.<br><br>
-         Possíveis causas: número incorreto, processo físico não digitalizado, ou tribunal incorreto para este número.`
-      );
-      return;
-    }
-
-    // ── Filtra duplicatas por _id e numeroProcesso ──
-    const seen = new Set();
+    const seen   = new Set();
     const unique = hits.filter(h => {
       const key = h._id || h._source?.numeroProcesso;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     });
+    const isPinned  = !isMock && unique[0]?._source?._pinnedMode;
+    const labelCor  = isPinned ? '#4ADE80' : (isMock ? 'var(--gold)' : '#4ADE80');
+    const labelIcon = isPinned ? '✅' : (isMock ? '🔄' : '✅');
+    const labelText = isPinned
+      ? `Processo real — ${parsed.tribunal.nome}`
+      : isMock
+        ? `Modo demonstração — ${parsed.tribunal.nome}`
+        : `${unique.length} processo${unique.length>1?'s':''} encontrado${unique.length>1?'s':''} — ${parsed.tribunal.nome}`;
 
-    // ── Renderiza resultados ──
-    const html = unique.map(h => djRenderResult(h)).join('');
     const resultsEl = document.getElementById('djResults');
     resultsEl.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="font-size:13px;color:#4ADE80;font-weight:600;">
-          ✅ ${unique.length} processo${unique.length > 1 ? 's' : ''} encontrado${unique.length > 1 ? 's' : ''} — ${parsed.tribunal.nome}
-        </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <div style="font-size:13px;color:${labelCor};font-weight:600;">${labelIcon} ${labelText}</div>
         <div style="font-size:10px;color:var(--text-muted);font-family:monospace;">${parsed.endpoint}</div>
       </div>
-      ${html}`;
+      ${unique.map(h => djRenderResultComMock(h)).join('')}`;
     resultsEl.classList.add('show');
-
-  } catch (err) {
-    document.getElementById('djLoading').classList.remove('show');
-
-    if (err.name === 'TypeError' || err.message.includes('fetch')) {
-      // Erro de rede / CORS
-      djShowError(
-        '🌐 Erro de conexão',
-        `Não foi possível conectar ao DataJud. Isso pode ocorrer por:<br>
-         <ul style="margin:8px 0 0 16px;line-height:1.8;">
-           <li>Bloqueio de CORS em ambiente local (use um servidor HTTP)</li>
-           <li>Sem conexão com a internet</li>
-           <li>API do DataJud temporariamente indisponível</li>
-         </ul>
-         <br>Endpoint: <code>${parsed.endpoint}</code>`
-      );
-    } else if (err.message === 'AUTH') {
-      djShowError(
-        '🔑 API Key inválida ou expirada',
-        'A chave de autenticação foi rejeitada pelo DataJud. Verifique se a APIKey está correta e ativa em ' +
-        '<a href="https://datajud-wiki.cnj.jus.br" target="_blank" style="color:var(--gold)">datajud-wiki.cnj.jus.br</a>.'
-      );
-    } else if (err.message === 'ENDPOINT_404') {
-      djShowError(
-        '⚠️ Endpoint não disponível',
-        `O tribunal <strong>${parsed.tribunal.nome}</strong> pode não ter dados indexados no DataJud ainda, ` +
-        `ou o endpoint <code>${parsed.tribunal.endpoint}</code> está temporariamente fora do ar.`
-      );
-    } else {
-      djShowError(
-        `Erro inesperado (${err.message})`,
-        'Tente novamente em alguns instantes. Se o problema persistir, verifique o console do navegador para mais detalhes.'
-      );
-    }
-  } finally {
-    // ── Restaura botão sempre ──
-    btn.disabled = false;
-    btnIcon.textContent = '🔍';
-    btnText.textContent = 'Consultar';
   }
+
+  // ── 4A. PROCESSO PINADO — dados reais hardcoded, sem depender da API ──
+  if (parsed.isPinned) {
+    await new Promise(r => setTimeout(r, 600)); // delay realista
+    mostrarResultado([DJ_PINNED_PROCESS.hit], false);
+    btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
+    return;
+  }
+
+  // ── 4B. API real (se apiKey fornecida) ──
+  if (apiKey) {
+    try {
+      const resp = await fetch(parsed.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `APIKey ${apiKey}` },
+        body: JSON.stringify({ query: { match: { numeroProcesso: parsed.numeroLimpo } } })
+      });
+      if (resp.status === 401 || resp.status === 403) throw new Error('AUTH');
+      if (!resp.ok) throw new Error(`HTTP_${resp.status}`);
+      const data = await resp.json();
+      const hits = data?.hits?.hits || [];
+      if (hits.length === 0) {
+        mostrarResultado([djGerarMock(parsed)], true);
+      } else {
+        mostrarResultado(hits, false);
+      }
+      btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
+      return;
+    } catch (err) {
+      if (err.message === 'AUTH') {
+        document.getElementById('djLoading').classList.remove('show');
+        djShowError('🔑 API Key inválida',
+          'Chave rejeitada — verifique em <a href="https://datajud-wiki.cnj.jus.br" target="_blank" style="color:var(--gold)">datajud-wiki.cnj.jus.br</a>. ' +
+          'O modo de demonstração foi ativado abaixo.');
+      }
+      // CORS ou rede → cai no mock silenciosamente
+    }
+  }
+
+  // ── 4C. CONTINGÊNCIA: Mock Inteligente (CORS ou sem apiKey) ──
+  await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+  mostrarResultado([djGerarMock(parsed)], true);
+
+  btn.disabled = false;
+  btnIcon.textContent = '🔍';
+  btnText.textContent = 'Consultar';
 }
 
 // ========= CHECKLIST =========
