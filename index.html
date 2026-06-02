@@ -5050,6 +5050,42 @@ function analisarTexto() {
   const box = document.getElementById('diagSummaryBox');
   box.textContent = r.summaryText;
   box.className = 'diag-summary-box ' + r.nivel;
+
+  // Botões de verificação — extrai número CNJ do texto se existir
+  const cnjMatch = texto.match(/\d{7}-\d{2}\.\d{4}\.\d\.\d{2,3}\.\d{4}/);
+  const cnjNum   = cnjMatch ? cnjMatch[0] : null;
+  const existingBtn = document.getElementById('diagVerificarBtn');
+  if (existingBtn) existingBtn.remove();
+
+  if (cnjNum) {
+    const btnDiv = document.createElement('div');
+    btnDiv.id = 'diagVerificarBtn';
+    btnDiv.style.cssText = 'margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);';
+    btnDiv.innerHTML = `
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">
+        🔎 Número CNJ encontrado — verificar nas fontes oficiais:
+      </div>
+      <div style="font-size:12px;font-family:monospace;color:var(--gold);margin-bottom:8px;">${cnjNum}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <a href="https://www.jusbrasil.com.br/consulta-processual/busca?q=${encodeURIComponent(cnjNum)}" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:#4ADE80;text-decoration:none;">
+          🔗 Verificar no JusBrasil
+        </a>
+        <a href="https://processo.stj.jus.br/processo/pesquisa/?tipoPesquisa=tipoPesquisaNumeroRegistro&termo=${cnjNum.replace(/\D/g,'')}" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:5px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:#93C5FD;text-decoration:none;">
+          🔗 Portal STJ
+        </a>
+        <a href="https://portal.stf.jus.br/processos/listarProcessos.asp?classe=&numeroProcesso=${cnjNum.replace(/\D/g,'')}" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:5px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:#93C5FD;text-decoration:none;">
+          🔗 Portal STF
+        </a>
+        <a href="https://datajud.cnj.jus.br/" target="_blank" rel="noopener"
+          style="display:inline-flex;align-items:center;gap:5px;background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.25);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--gold-light);text-decoration:none;">
+          🔗 DataJud/CNJ
+        </a>
+      </div>`;
+    box.after(btnDiv);
+  }
 }
 
 // Contador de caracteres
@@ -5269,28 +5305,106 @@ async function buscarComIA() {
 
 // Stub vazio — chamarClaudeAPI não é mais usada (mantida para não quebrar referências)
 async function chamarClaudeAPI(prompt) { throw new Error('Use buscarComIA() diretamente.'); }
+
+/** Monta URLs de verificação para cada tribunal */
+function urlsVerificacao(numeroCNJ, tribunalKey) {
+  const n = (numeroCNJ || '').replace(/\D/g, '');
+  const nFormatado = numeroCNJ || '';
+  return {
+    jusbrasil: `https://www.jusbrasil.com.br/consulta-processual/busca?q=${encodeURIComponent(nFormatado || '')}`,
+    stj:    'https://processo.stj.jus.br/processo/pesquisa/?tipoPesquisa=tipoPesquisaNumeroRegistro&termo=' + n,
+    stf:    'https://portal.stf.jus.br/processos/listarProcessos.asp?classe=&numeroProcesso=' + n,
+    tst:    'https://consultaprocessual.tst.jus.br/consultaProcessual/consultaTstNumUnica.do?consulta=Consultar&numeroTst=' + encodeURIComponent(nFormatado),
+    tjsp:   'https://esaj.tjsp.jus.br/cpopg/search.do?conversationId=&cbPesquisa=NUMPROC&numeroDigitoAnoUnificado=' + n.slice(0,7) + '&foroNumeroUnificado=' + n.slice(-4) + '&dadosConsulta.valorConsultaNuUnificado=' + encodeURIComponent(nFormatado) + '&dadosConsulta.valorConsulta=&dadosConsulta.dtDataInicioLocalização=&localPesquisa.cdLocal=-1&cbPesquisa=NUMPROC&dadosConsulta.uuidForo=',
+    senado:  'https://legis.senado.leg.br/norma/',
+    datajud: 'https://datajud.cnj.jus.br/'
+  };
+}
+
+/** Monta os botões de verificação adequados para cada tribunal */
+function botoesVerificacao(numeroCNJ, tribunalKey) {
+  const urls = urlsVerificacao(numeroCNJ, tribunalKey);
+  const btnStyle = 'display:inline-flex;align-items:center;gap:5px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--text-muted);cursor:pointer;font-family:\'DM Sans\',sans-serif;text-decoration:none;transition:all 0.2s;';
+
+  const jusbrasil = `<a href="${urls.jusbrasil}" target="_blank" rel="noopener"
+    style="${btnStyle}" onmouseover="this.style.borderColor='#4ADE80';this.style.color='#4ADE80'"
+    onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
+    🔗 JusBrasil</a>`;
+
+  let tribunalBtn = '';
+  if (tribunalKey === 'STJ' || tribunalKey === 'qualquer') {
+    tribunalBtn = `<a href="${urls.stj}" target="_blank" rel="noopener"
+      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
+      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
+      🔗 Portal STJ</a>`;
+  } else if (tribunalKey === 'STF') {
+    tribunalBtn = `<a href="${urls.stf}" target="_blank" rel="noopener"
+      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
+      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
+      🔗 Portal STF</a>`;
+  } else if (tribunalKey === 'TST') {
+    tribunalBtn = `<a href="${urls.tst}" target="_blank" rel="noopener"
+      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
+      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
+      🔗 Portal TST</a>`;
+  } else if (tribunalKey === 'TJSP') {
+    tribunalBtn = `<a href="${urls.tjsp}" target="_blank" rel="noopener"
+      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
+      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
+      🔗 e-SAJ TJSP</a>`;
+  }
+
+  const datajud = `<a href="${urls.datajud}" target="_blank" rel="noopener"
+    style="${btnStyle}" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
+    onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
+    🔗 DataJud/CNJ</a>`;
+
+  return jusbrasil + (tribunalBtn ? ' ' + tribunalBtn : '') + ' ' + datajud;
+}
+
 function renderBuscaCard(texto, index, tribunal) {
   const id = 'buscard_' + index;
-  const tema = texto.slice(0, 60).replace(/\n/g, ' ').trim() + '…';
+
+  // Extrai número CNJ do texto se existir
+  const cnj = texto.match(/\d{7}-\d{2}\.\d{4}\.\d\.\d{2,3}\.\d{4}/);
+  const numeroCNJ = cnj ? cnj[0] : '';
+
   return `
     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px 22px;animation:fadeIn 0.3s ease;">
-      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">
-        🏛 ${tribunal === 'qualquer' ? 'STF / STJ / TST' : tribunal} — Jurisprudência ${index + 1}
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);">
+          🏛 ${tribunal === 'qualquer' ? 'STF / STJ / TST' : tribunal} — Jurisprudência ${index + 1}
+        </div>
+        ${numeroCNJ ? `<div style="font-size:11px;color:var(--text-muted);font-family:monospace;">${numeroCNJ}</div>` : ''}
       </div>
-      <div id="${id}" style="font-size:13px;color:#CBD5E1;line-height:1.8;margin-bottom:14px;font-style:italic;">${texto.trim().replace(/\n/g, '<br>')}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+
+      <div id="${id}" style="font-size:13px;color:#CBD5E1;line-height:1.8;margin-bottom:16px;font-style:italic;">${texto.trim().replace(/\n/g, '<br>')}</div>
+
+      <!-- Aviso de simulação -->
+      <div style="background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.2);border-radius:8px;padding:9px 12px;font-size:11px;color:var(--gold-light);line-height:1.5;margin-bottom:12px;">
+        ⚠️ <strong>Esta jurisprudência é simulada</strong> com base em teses jurídicas reais, mas o processo específico pode não existir. Clique nos botões abaixo para verificar nas fontes oficiais.
+      </div>
+
+      <!-- Botões principais -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
         <button onclick="enviarParaAnaliseTexto('${id}')"
-          style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(201,162,39,0.2),rgba(201,162,39,0.1));border:1px solid var(--gold);border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;color:var(--gold-light);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;"
+          style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(201,162,39,0.2),rgba(201,162,39,0.1));border:1px solid var(--gold);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;color:var(--gold-light);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;"
           onmouseover="this.style.background='rgba(201,162,39,0.3)'"
           onmouseout="this.style.background='linear-gradient(135deg,rgba(201,162,39,0.2),rgba(201,162,39,0.1))'">
-          🔬 Analisar (detectar alucinação)
+          🔬 Analisar alucinação
         </button>
         <button onclick="copiarTexto('${id}', this)"
-          style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;"
+          style="display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;"
           onmouseover="this.style.borderColor='rgba(255,255,255,0.3)';this.style.color='var(--white)'"
           onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-          📋 Copiar texto
+          📋 Copiar
         </button>
+      </div>
+
+      <!-- Botões de verificação nas fontes oficiais -->
+      <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:10px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">✅ Verificar nas fontes oficiais:</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">${botoesVerificacao(numeroCNJ, tribunal)}</div>
       </div>
     </div>`;
 }
