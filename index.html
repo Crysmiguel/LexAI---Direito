@@ -280,7 +280,7 @@
   .nav-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     gap: 0;
@@ -290,23 +290,32 @@
     font-size: 16px;
     font-weight: 700;
     color: var(--white);
-    margin-right: 24px;
+    margin-right: 16px;
     padding: 14px 0;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .nav-logo span { color: var(--gold); }
+
+  /* Desktop: botões em linha */
+  .nav-links-desktop {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+  }
 
   .nav-btn {
     background: none;
     border: none;
     color: var(--text-muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    padding: 18px 18px;
+    padding: 18px 12px;
     cursor: pointer;
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
@@ -315,6 +324,111 @@
 
   .nav-btn:hover { color: var(--gold-light); }
   .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* Hamburger button — só aparece no mobile */
+  .nav-hamburger {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    color: var(--white);
+    font-size: 18px;
+    line-height: 1;
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .nav-hamburger:hover { background: rgba(201,162,39,0.1); }
+
+  /* Drawer mobile */
+  .nav-drawer {
+    display: none;
+    position: fixed;
+    top: 0; right: 0;
+    width: 260px;
+    height: 100vh;
+    background: rgba(9,18,42,0.99);
+    border-left: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    z-index: 9999;
+    flex-direction: column;
+    padding: 0;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    overflow-y: auto;
+  }
+
+  .nav-drawer.open {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .nav-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .nav-drawer-logo {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .nav-drawer-logo span { color: var(--gold); }
+
+  .nav-drawer-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .nav-drawer-close:hover { color: var(--white); }
+
+  .nav-drawer-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 16px 20px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: all 0.15s;
+  }
+  .nav-drawer-btn:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+  .nav-drawer-btn.active { color: var(--gold); background: rgba(201,162,39,0.06); border-left: 3px solid var(--gold); padding-left: 17px; }
+
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    backdrop-filter: blur(2px);
+  }
+  .nav-overlay.show { display: block; }
+
+  /* RESPONSIVO */
+  @media (max-width: 768px) {
+    .nav-links-desktop { display: none; }
+    .nav-hamburger { display: flex; align-items: center; justify-content: center; }
+    .nav-inner { padding: 0 16px; }
+  }
 
   /* ===== TIMELINE ===== */
   .timeline-outer {
@@ -462,7 +576,23 @@
   main { max-width: 1200px; margin: 0 auto; padding: 48px 40px 80px; display: none; }
   main.visible { display: block; }
 
-  /* Hide sticky nav and footer until a section is opened */
+  @media (max-width: 768px) {
+    main { padding: 28px 16px 60px; }
+    .hero-nav { padding: 16px 20px; }
+    .hero-nav-links { display: none; } /* no mobile, só drawer */
+    .hero-body { padding: 40px 20px; }
+    .hero-title { font-size: 52px; letter-spacing: -1px; }
+    .hero-title-sub, .hero-title-sub2 { font-size: 26px; }
+    .hero-stats { gap: 28px; }
+    .hero-btns { flex-direction: column; align-items: center; gap: 10px; }
+    .hero-btn-primary, .hero-btn-outline { width: 100%; max-width: 280px; text-align: center; }
+    .analise-layout { grid-template-columns: 1fr !important; }
+    .pesquisa-layout { grid-template-columns: 1fr !important; }
+    .futuro-grid { grid-template-columns: 1fr !important; }
+    .detector-grid { grid-template-columns: 1fr !important; }
+    .casos-grid { grid-template-columns: 1fr !important; }
+    .ferramentas-grid { grid-template-columns: 1fr !important; }
+  }
   nav.sticky-nav { display: none; }
   nav.sticky-nav.visible { display: block; }
   footer { display: none; }
@@ -2568,18 +2698,44 @@
   </div>
 </div>
 
+<!-- OVERLAY do drawer mobile -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER MOBILE -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-header">
+    <div class="nav-drawer-logo">Lex<span>AI</span></div>
+    <button class="nav-drawer-close" onclick="closeDrawer()" aria-label="Fechar menu">×</button>
+  </div>
+  <button class="nav-drawer-btn" onclick="navGo('apresentacao')">📋 Apresentação</button>
+  <button class="nav-drawer-btn" onclick="navGo('chat')">💬 Chat IA Jurídica</button>
+  <button class="nav-drawer-btn" onclick="navGo('quiz')">🎯 Quiz</button>
+  <button class="nav-drawer-btn" onclick="navGo('detector')">🔍 Detector de Fake</button>
+  <button class="nav-drawer-btn" onclick="navGo('futuro')">🚀 Futuro da Advocacia</button>
+  <button class="nav-drawer-btn" onclick="navGo('ferramentas')">🛠️ Ferramentas</button>
+  <button class="nav-drawer-btn" onclick="navGo('analise')">🔬 Pesquisa &amp; Análise IA</button>
+  <button class="nav-drawer-btn" onclick="navGo('pesquisa')">🤖 Pesquisa IA</button>
+</div>
+
 <!-- STICKY NAV -->
 <nav class="sticky-nav" id="stickyNav">
   <div class="nav-inner">
     <div class="nav-logo">Lex<span>AI</span></div>
-    <button class="nav-btn" onclick="showSection('apresentacao', this)">📋 Apresentação</button>
-    <button class="nav-btn" onclick="showSection('chat', this)">💬 Chat IA Jurídica</button>
-    <button class="nav-btn" onclick="showSection('quiz', this)">🎯 Quiz</button>
-    <button class="nav-btn" onclick="showSection('detector', this)">🔍 Detector de Fake</button>
-    <button class="nav-btn" onclick="showSection('futuro', this)">🚀 Futuro da Advocacia</button>
-    <button class="nav-btn" onclick="showSection('ferramentas', this)">🛠️ Ferramentas</button>
-    <button class="nav-btn" onclick="showSection('analise', this)">🔬 Análise de Texto</button>
-    <button class="nav-btn" onclick="showSection('pesquisa', this)">🤖 Pesquisa IA</button>
+
+    <!-- Desktop: links em linha -->
+    <div class="nav-links-desktop">
+      <button class="nav-btn" onclick="showSection('apresentacao', this)">📋 Apresentação</button>
+      <button class="nav-btn" onclick="showSection('chat', this)">💬 Chat IA</button>
+      <button class="nav-btn" onclick="showSection('quiz', this)">🎯 Quiz</button>
+      <button class="nav-btn" onclick="showSection('detector', this)">🔍 Detector</button>
+      <button class="nav-btn" onclick="showSection('futuro', this)">🚀 Futuro</button>
+      <button class="nav-btn" onclick="showSection('ferramentas', this)">🛠️ Ferramentas</button>
+      <button class="nav-btn" onclick="showSection('analise', this)">🔬 Pesquisa &amp; Análise</button>
+      <button class="nav-btn" onclick="showSection('pesquisa', this)">🤖 Pesquisa IA</button>
+    </div>
+
+    <!-- Mobile: botão hambúrguer (☰) -->
+    <button class="nav-hamburger" id="navHamburger" onclick="openDrawer()" aria-label="Abrir menu">☰</button>
   </div>
 </nav>
 
@@ -3258,8 +3414,8 @@
   <section id="analise" class="section">
     <div class="section-header">
       <div class="section-tag">Seção 06</div>
-      <h2 class="section-title">Busca e Análise de Jurisprudência</h2>
-      <p class="section-desc">Digite um tema para buscar jurisprudências reais via IA, ou cole um texto para detectar alucinações automaticamente.</p>
+      <h2 class="section-title">Pesquisa &amp; Análise de Jurisprudência</h2>
+      <p class="section-desc">Busque jurisprudências por tema com IA ou cole um texto para detectar alucinações automaticamente.</p>
       <div class="gold-line"></div>
     </div>
 
@@ -5051,45 +5207,9 @@ function analisarTexto() {
   box.textContent = r.summaryText;
   box.className = 'diag-summary-box ' + r.nivel;
 
-  // Botões de verificação — extrai número CNJ do texto se existir
-  const cnjMatch = texto.match(/\d{7}-\d{2}\.\d{4}\.\d\.\d{2,3}\.\d{4}/);
-  const cnjNum   = cnjMatch ? cnjMatch[0] : null;
+  // Remove botão de verificação anterior se existir
   const existingBtn = document.getElementById('diagVerificarBtn');
   if (existingBtn) existingBtn.remove();
-
-  if (cnjNum) {
-    const btnDiv = document.createElement('div');
-    btnDiv.id = 'diagVerificarBtn';
-    btnDiv.style.cssText = 'margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);';
-
-    const u = urlsVerificacao(cnjNum, 'qualquer');
-    const s = 'display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:7px 13px;font-size:11px;font-weight:700;text-decoration:none;';
-
-    btnDiv.innerHTML = `
-      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">
-        🔎 Número CNJ encontrado — verificar nas fontes oficiais:
-      </div>
-      <div style="font-size:12px;font-family:monospace;color:var(--gold);margin-bottom:10px;">${cnjNum}</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <a href="${u.jus}" target="_blank" rel="noopener noreferrer"
-          style="${s}background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);color:#4ADE80;">
-          🔗 JusBrasil
-        </a>
-        <a href="${u.stj}" target="_blank" rel="noopener noreferrer"
-          style="${s}background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.35);color:#93C5FD;">
-          🔗 STJ Jurisprudência
-        </a>
-        <a href="${u.stf}" target="_blank" rel="noopener noreferrer"
-          style="${s}background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.35);color:#93C5FD;">
-          🔗 STF Processos
-        </a>
-        <a href="${u.datajud}" target="_blank" rel="noopener noreferrer"
-          style="${s}background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);color:var(--gold-light);">
-          🔗 DataJud/CNJ
-        </a>
-      </div>`;
-    box.after(btnDiv);
-  }
 }
 
 // Contador de caracteres
@@ -5474,6 +5594,45 @@ function enviarParaAnalise(texto, btnEl) {
   if (ta) { ta.value = texto; ta.dispatchEvent(new Event('input')); }
   switchAnaliseTab(2);
   if (btnEl) { btnEl.innerHTML = '✅ Enviado!'; setTimeout(() => { btnEl.innerHTML = '📋 Enviar para Análise'; }, 1500); }
+}
+
+// =========================================================
+// NAVEGAÇÃO MOBILE — DRAWER / HAMBURGER
+// =========================================================
+
+function openDrawer() {
+  document.getElementById('navDrawer').classList.add('open');
+  document.getElementById('navOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  // Marca aba ativa no drawer
+  syncDrawerActive();
+}
+
+function closeDrawer() {
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+/** Navega pelo drawer: fecha drawer e abre a seção */
+function navGo(id) {
+  closeDrawer();
+  // Encontra o botão desktop correspondente para marcar como ativo
+  const desktopBtn = document.querySelector(`.nav-btn[onclick*="'${id}'"]`);
+  showSection(id, desktopBtn);
+  // Marca também no drawer
+  syncDrawerActive();
+}
+
+/** Sincroniza a classe active nos botões do drawer */
+function syncDrawerActive() {
+  const activeSection = document.querySelector('.section.active');
+  if (!activeSection) return;
+  const activeId = activeSection.id;
+  document.querySelectorAll('.nav-drawer-btn').forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || '';
+    btn.classList.toggle('active', onclick.includes("'" + activeId + "'"));
+  });
 }
 
 // =========================================================
