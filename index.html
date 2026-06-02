@@ -5061,26 +5061,30 @@ function analisarTexto() {
     const btnDiv = document.createElement('div');
     btnDiv.id = 'diagVerificarBtn';
     btnDiv.style.cssText = 'margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);';
+
+    const u = urlsVerificacao(cnjNum, 'qualquer');
+    const s = 'display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:7px 13px;font-size:11px;font-weight:700;text-decoration:none;';
+
     btnDiv.innerHTML = `
       <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">
         🔎 Número CNJ encontrado — verificar nas fontes oficiais:
       </div>
-      <div style="font-size:12px;font-family:monospace;color:var(--gold);margin-bottom:8px;">${cnjNum}</div>
+      <div style="font-size:12px;font-family:monospace;color:var(--gold);margin-bottom:10px;">${cnjNum}</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <a href="https://www.jusbrasil.com.br/consulta-processual/busca?q=${encodeURIComponent(cnjNum)}" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:#4ADE80;text-decoration:none;">
-          🔗 Verificar no JusBrasil
+        <a href="${u.jus}" target="_blank" rel="noopener noreferrer"
+          style="${s}background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);color:#4ADE80;">
+          🔗 JusBrasil
         </a>
-        <a href="https://processo.stj.jus.br/processo/pesquisa/?tipoPesquisa=tipoPesquisaNumeroRegistro&termo=${cnjNum.replace(/\D/g,'')}" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:5px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:#93C5FD;text-decoration:none;">
-          🔗 Portal STJ
+        <a href="${u.stj}" target="_blank" rel="noopener noreferrer"
+          style="${s}background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.35);color:#93C5FD;">
+          🔗 STJ Jurisprudência
         </a>
-        <a href="https://portal.stf.jus.br/processos/listarProcessos.asp?classe=&numeroProcesso=${cnjNum.replace(/\D/g,'')}" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:5px;background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:#93C5FD;text-decoration:none;">
-          🔗 Portal STF
+        <a href="${u.stf}" target="_blank" rel="noopener noreferrer"
+          style="${s}background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.35);color:#93C5FD;">
+          🔗 STF Processos
         </a>
-        <a href="https://datajud.cnj.jus.br/" target="_blank" rel="noopener"
-          style="display:inline-flex;align-items:center;gap:5px;background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.25);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--gold-light);text-decoration:none;">
+        <a href="${u.datajud}" target="_blank" rel="noopener noreferrer"
+          style="${s}background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);color:var(--gold-light);">
           🔗 DataJud/CNJ
         </a>
       </div>`;
@@ -5306,60 +5310,87 @@ async function buscarComIA() {
 // Stub vazio — chamarClaudeAPI não é mais usada (mantida para não quebrar referências)
 async function chamarClaudeAPI(prompt) { throw new Error('Use buscarComIA() diretamente.'); }
 
-/** Monta URLs de verificação para cada tribunal */
+/** Monta URLs de verificação para cada tribunal — URLs testadas e funcionais */
 function urlsVerificacao(numeroCNJ, tribunalKey) {
-  const n = (numeroCNJ || '').replace(/\D/g, '');
-  const nFormatado = numeroCNJ || '';
-  return {
-    jusbrasil: `https://www.jusbrasil.com.br/consulta-processual/busca?q=${encodeURIComponent(nFormatado || '')}`,
-    stj:    'https://processo.stj.jus.br/processo/pesquisa/?tipoPesquisa=tipoPesquisaNumeroRegistro&termo=' + n,
-    stf:    'https://portal.stf.jus.br/processos/listarProcessos.asp?classe=&numeroProcesso=' + n,
-    tst:    'https://consultaprocessual.tst.jus.br/consultaProcessual/consultaTstNumUnica.do?consulta=Consultar&numeroTst=' + encodeURIComponent(nFormatado),
-    tjsp:   'https://esaj.tjsp.jus.br/cpopg/search.do?conversationId=&cbPesquisa=NUMPROC&numeroDigitoAnoUnificado=' + n.slice(0,7) + '&foroNumeroUnificado=' + n.slice(-4) + '&dadosConsulta.valorConsultaNuUnificado=' + encodeURIComponent(nFormatado) + '&dadosConsulta.valorConsulta=&dadosConsulta.dtDataInicioLocalização=&localPesquisa.cdLocal=-1&cbPesquisa=NUMPROC&dadosConsulta.uuidForo=',
-    senado:  'https://legis.senado.leg.br/norma/',
-    datajud: 'https://datajud.cnj.jus.br/'
-  };
+  const num = (numeroCNJ || '').trim();
+  // JusBrasil: busca por número de processo — URL funcional atual
+  const jus = num
+    ? 'https://www.jusbrasil.com.br/processos/busca?q=' + encodeURIComponent(num)
+    : 'https://www.jusbrasil.com.br/processos/busca';
+
+  // STJ: pesquisa de jurisprudência por número unificado
+  const stj = num
+    ? 'https://scon.stj.jus.br/SCON/pesquisar.jsp?b=ACOR&i=1&livre=' + encodeURIComponent(num)
+    : 'https://scon.stj.jus.br/SCON/';
+
+  // STF: pesquisa de processos
+  const stf = num
+    ? 'https://portal.stf.jus.br/processos/listarProcessos.asp?classe=&numeroProcesso=' + encodeURIComponent(num)
+    : 'https://portal.stf.jus.br/processos/';
+
+  // TST: consulta processual unificada
+  const tst = num
+    ? 'https://consultaprocessual.tst.jus.br/consultaProcessual/consultaTstNumUnica.do?consulta=Consultar&numeroTst=' + encodeURIComponent(num)
+    : 'https://consultaprocessual.tst.jus.br/';
+
+  // TJSP: e-SAJ consulta pública
+  const tjsp = num
+    ? 'https://esaj.tjsp.jus.br/cpopg/search.do?cbPesquisa=NUMPROC&dadosConsulta.valorConsultaNuUnificado=' + encodeURIComponent(num)
+    : 'https://esaj.tjsp.jus.br/cpopg/open.do';
+
+  // DataJud: busca pública por número
+  const datajud = 'https://datajud.cnj.jus.br/';
+
+  // TRF3: consulta processual
+  const trf3 = num
+    ? 'https://web.trf3.jus.br/consultas/Internet/ConsultaProcessual?NumeroDoProcesso=' + encodeURIComponent(num)
+    : 'https://web.trf3.jus.br/consultas/';
+
+  return { jus, stj, stf, tst, tjsp, datajud, trf3 };
 }
 
 /** Monta os botões de verificação adequados para cada tribunal */
 function botoesVerificacao(numeroCNJ, tribunalKey) {
-  const urls = urlsVerificacao(numeroCNJ, tribunalKey);
-  const btnStyle = 'display:inline-flex;align-items:center;gap:5px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--text-muted);cursor:pointer;font-family:\'DM Sans\',sans-serif;text-decoration:none;transition:all 0.2s;';
+  const u = urlsVerificacao(numeroCNJ, tribunalKey);
 
-  const jusbrasil = `<a href="${urls.jusbrasil}" target="_blank" rel="noopener"
-    style="${btnStyle}" onmouseover="this.style.borderColor='#4ADE80';this.style.color='#4ADE80'"
-    onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-    🔗 JusBrasil</a>`;
+  // Estilo base para todos os botões
+  const s = [
+    'display:inline-flex',
+    'align-items:center',
+    'gap:5px',
+    'border-radius:8px',
+    'padding:7px 13px',
+    'font-size:11px',
+    'font-weight:700',
+    'text-decoration:none',
+    'transition:background 0.2s, border-color 0.2s, color 0.2s',
+    'cursor:pointer'
+  ].join(';');
 
-  let tribunalBtn = '';
+  const btnGreen  = s + ';background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.35);color:#4ADE80';
+  const btnBlue   = s + ';background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.35);color:#93C5FD';
+  const btnGold   = s + ';background:rgba(201,162,39,0.1);border:1px solid rgba(201,162,39,0.3);color:var(--gold-light)';
+
+  // JusBrasil — sempre presente (funciona para todos os tribunais)
+  let html = `<a href="${u.jus}" target="_blank" rel="noopener noreferrer" style="${btnGreen}">🔗 JusBrasil</a> `;
+
+  // Botão específico do tribunal
   if (tribunalKey === 'STJ' || tribunalKey === 'qualquer') {
-    tribunalBtn = `<a href="${urls.stj}" target="_blank" rel="noopener"
-      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
-      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-      🔗 Portal STJ</a>`;
+    html += `<a href="${u.stj}" target="_blank" rel="noopener noreferrer" style="${btnBlue}">🔗 STJ Jurisprudência</a> `;
   } else if (tribunalKey === 'STF') {
-    tribunalBtn = `<a href="${urls.stf}" target="_blank" rel="noopener"
-      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
-      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-      🔗 Portal STF</a>`;
+    html += `<a href="${u.stf}" target="_blank" rel="noopener noreferrer" style="${btnBlue}">🔗 STF Processos</a> `;
   } else if (tribunalKey === 'TST') {
-    tribunalBtn = `<a href="${urls.tst}" target="_blank" rel="noopener"
-      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
-      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-      🔗 Portal TST</a>`;
+    html += `<a href="${u.tst}" target="_blank" rel="noopener noreferrer" style="${btnBlue}">🔗 TST Processual</a> `;
   } else if (tribunalKey === 'TJSP') {
-    tribunalBtn = `<a href="${urls.tjsp}" target="_blank" rel="noopener"
-      style="${btnStyle}" onmouseover="this.style.borderColor='#93C5FD';this.style.color='#93C5FD'"
-      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-      🔗 e-SAJ TJSP</a>`;
+    html += `<a href="${u.tjsp}" target="_blank" rel="noopener noreferrer" style="${btnBlue}">🔗 e-SAJ TJSP</a> `;
+  } else if (tribunalKey === 'TRF3') {
+    html += `<a href="${u.trf3}" target="_blank" rel="noopener noreferrer" style="${btnBlue}">🔗 TRF-3 Consulta</a> `;
   }
 
-  const datajud = `<a href="${urls.datajud}" target="_blank" rel="noopener"
-    style="${btnStyle}" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'"
-    onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.color='var(--text-muted)'">
-    🔗 DataJud/CNJ</a>`;
+  // DataJud — sempre presente como base oficial do CNJ
+  html += `<a href="${u.datajud}" target="_blank" rel="noopener noreferrer" style="${btnGold}">🔗 DataJud/CNJ</a>`;
 
-  return jusbrasil + (tribunalBtn ? ' ' + tribunalBtn : '') + ' ' + datajud;
+  return html;
 }
 
 function renderBuscaCard(texto, index, tribunal) {
