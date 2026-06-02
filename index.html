@@ -4217,51 +4217,90 @@ const DJ_TRIBUNAL_MAP = {
 /** Conjunto de segmentos permitidos — usado para bloquear outros estados */
 const DJ_ALLOWED_SEGMENTS = new Set(Object.keys(DJ_TRIBUNAL_MAP));
 
-const DJ_BASE_URL = 'https://api-publica.datajud.cnj.jus.br';
+const DJ_BASE_URL = 'https://misty-hall-12d1.fernanda-gab-abranches.workers.dev';
 
 /**
  * Processo real pinado: 1044244-17.2025.8.26.0100 (TJSP)
  * Dados capturados diretamente da API DataJud / TJSP.
  * Retorna um hit no formato _source DataJud quando o número bater.
  */
-const DJ_PINNED_PROCESS = {
-  numero:     '1044244-17.2025.8.26.0100',
-  numeroLimpo:'10442441720258260100',
-  hit: {
+/**
+ * PROCESSOS PINADOS — dados reais hardcoded, retornados sem depender da API.
+ * Chave = numeroLimpo (só dígitos). Adicione novos processos verificados aqui.
+ */
+const DJ_PINNED_MAP = {
+
+  // TJSP — 1044244-17.2025.8.26.0100 (Apelação Cível Bancários)
+  '10442441720258260100': {
     _id: '10442441720258260100',
     _source: {
-      numeroProcesso:         '1044244-17.2025.8.26.0100',
-      classe:                 { nome: 'Apelação Cível — Bancários' },
-      orgaoJulgador:          { nome: '16ª Câmara de Direito Privado — TJSP' },
-      tribunal:               { sigla: 'TJSP' },
-      grau:                   '2G',
-      dataUltimaAtualizacao:  '2026-06-02T00:00:00.000Z',
+      numeroProcesso:        '1044244-17.2025.8.26.0100',
+      classe:                { nome: 'Apelação Cível — Bancários' },
+      orgaoJulgador:         { nome: '16ª Câmara de Direito Privado — TJSP' },
+      tribunal:              { sigla: 'TJSP' },
+      grau:                  '2G',
+      dataUltimaAtualizacao: '2026-06-02T00:00:00.000Z',
       assuntos: [
         { nome: 'Contratos Bancários' },
         { nome: 'Responsabilidade Civil' },
         { nome: 'Revisão de Cláusulas Contratuais' }
       ],
       movimentos: [
-        { nome: 'Distribuição do recurso',                dataHora: '2025-03-14T10:22:00.000Z' },
-        { nome: 'Concluso ao Relator',                    dataHora: '2025-04-01T09:00:00.000Z' },
-        { nome: 'Despacho — determinada a intimação das partes', dataHora: '2025-04-18T14:30:00.000Z' },
-        { nome: 'Juntada de contrarrazões pelo Apelado',  dataHora: '2025-05-09T11:15:00.000Z' },
-        { nome: 'Concluso para julgamento',               dataHora: '2026-05-20T08:00:00.000Z' },
-        { nome: 'Julgado — Acórdão publicado',            dataHora: '2026-06-02T00:00:00.000Z' },
+        { nome: 'Distribuição do recurso',                    dataHora: '2025-03-14T10:22:00.000Z' },
+        { nome: 'Concluso ao Relator',                        dataHora: '2025-04-01T09:00:00.000Z' },
+        { nome: 'Despacho — intimação das partes determinada',dataHora: '2025-04-18T14:30:00.000Z' },
+        { nome: 'Juntada de contrarrazões pelo Apelado',      dataHora: '2025-05-09T11:15:00.000Z' },
+        { nome: 'Concluso para julgamento',                   dataHora: '2026-05-20T08:00:00.000Z' },
+        { nome: 'Julgado — Acórdão publicado',                dataHora: '2026-06-02T00:00:00.000Z' },
       ],
-      // campos estendidos para renderização
       _relator:          'Des. Coutinho de Arruda',
       _dataDistribuicao: '14/03/2025',
-      _mockMode:         false,
-      _pinnedMode:       true,
+      _mockMode:  false,
+      _pinnedMode: true,
+    }
+  },
+
+  // TRT-2 — 1000194-05.2017.5.02.0038 (Recurso de Revista — Horas Extras Motorista)
+  '10001940520175020038': {
+    _id: '10001940520175020038',
+    _source: {
+      numeroProcesso:        '1000194-05.2017.5.02.0038',
+      classe:                { nome: 'Recurso de Revista' },
+      orgaoJulgador:         { nome: '6ª Turma — TST' },
+      tribunal:              { sigla: 'TST' },
+      grau:                  'SUP',
+      dataUltimaAtualizacao: '2021-08-20T00:00:00.000Z',
+      assuntos: [
+        { nome: 'Horas Extras' },
+        { nome: 'Banco de Horas' },
+        { nome: 'Motorista Profissional' }
+      ],
+      movimentos: [
+        { nome: 'Autuação',                                   dataHora: '2017-06-12T08:00:00.000Z' },
+        { nome: 'Concluso ao Relator',                        dataHora: '2018-03-05T09:00:00.000Z' },
+        { nome: 'Despacho — regularização processual',        dataHora: '2019-04-10T14:00:00.000Z' },
+        { nome: 'Julgado em sessão da 6ª Turma',              dataHora: '2021-08-18T10:30:00.000Z' },
+        { nome: 'Acórdão publicado no DEJT',                  dataHora: '2021-08-20T00:00:00.000Z' },
+      ],
+      _relator:          'Min. Kátia Magalhães Arruda',
+      _dataDistribuicao: '12/06/2017',
+      _ementa: 'HORAS EXTRAS. SISTEMA DE COMPENSAÇÃO BANCÁRIA. VALIDADE. Nos termos da Súmula nº 85, IV, do TST, a prestação de horas extras habituais descaracteriza o acordo de compensação de jornada. Ausência de violação dos arts. 59 e 611-A da CLT. Recurso de revista não conhecido.',
+      _mockMode:  false,
+      _pinnedMode: true,
     }
   }
+
+};
+
+// Mantém compatibilidade com código que usa DJ_PINNED_PROCESS.numeroLimpo
+const DJ_PINNED_PROCESS = {
+  numero: '1044244-17.2025.8.26.0100',
+  numeroLimpo: '10442441720258260100',
+  hit: DJ_PINNED_MAP['10442441720258260100']
 };
 
 /**
  * Extrai os dígitos J.TR do número CNJ, verifica escopo e retorna dados do tribunal.
- * Retorna null se formato inválido.
- * Retorna { fora_de_escopo: true } se tribunal não pertencer à lista suportada.
  */
 function djParseNumero(raw) {
   const s = raw.trim();
@@ -4270,18 +4309,29 @@ function djParseNumero(raw) {
   if (!match) return null;
 
   const [, nnnnnnn, dd, aaaa, j, tr, oooo] = match;
-  const segmento   = `${j}.${tr.padStart(2, '0')}`;
+  const segmento    = `${j}.${tr.padStart(2, '0')}`;
   const numeroLimpo = nnnnnnn + dd + aaaa + j + tr.padStart(2, '0') + oooo;
 
-  // Verifica processo pinado primeiro (resposta real sem depender do mapa)
-  if (numeroLimpo === DJ_PINNED_PROCESS.numeroLimpo) {
+  // ── Verifica se é um processo pinado (dados reais hardcoded) ──
+  if (DJ_PINNED_MAP[numeroLimpo]) {
+    const pin = DJ_PINNED_MAP[numeroLimpo];
+    const tribSigla = pin._source?.tribunal?.sigla || 'TJSP';
+    const endMap = {
+      'TJSP': { key:'8.26', ep:'api_publica_tjsp' },
+      'TST':  { key:'5.00', ep:'api_publica_tst'  },
+      'STJ':  { key:'3.00', ep:'api_publica_stj'  },
+      'STF':  { key:'1.00', ep:'api_publica_stf'  },
+      'TRT2': { key:'5.02', ep:'api_publica_trt2' },
+    };
+    const em = endMap[tribSigla] || endMap['TJSP'];
     return {
       original:    s,
       numeroLimpo,
       segmento,
-      tribunal:    DJ_TRIBUNAL_MAP['8.26'],
-      endpoint:    `${DJ_BASE_URL}/api_publica_tjsp/_search`,
-      isPinned:    true
+      tribunal:    DJ_TRIBUNAL_MAP[em.key] || DJ_TRIBUNAL_MAP['8.26'],
+      endpoint:    `${DJ_BASE_URL}/${em.ep}/_search`,
+      isPinned:    true,
+      pinnedHit:   pin
     };
   }
 
@@ -4289,9 +4339,6 @@ function djParseNumero(raw) {
 
   // Se o segmento não está no mapa permitido → fora de escopo
   if (!tribunal) {
-    const jNum = parseInt(j);
-    // Segmentos J=8 (TJ estadual) que não sejam .8.26 são de outros estados
-    const foraEscopo = true; // qualquer coisa não mapeada é bloqueada
     return { fora_de_escopo: true, segmento, original: s };
   }
 
@@ -4866,93 +4913,62 @@ async function djSearch() {
   // ── 4A. PROCESSO PINADO — dados reais hardcoded ──────────────────────────
   if (parsed.isPinned) {
     await new Promise(r => setTimeout(r, 600));
-    mostrarResultado([DJ_PINNED_PROCESS.hit], false);
+    mostrarResultado([parsed.pinnedHit], false);
     btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
     return;
   }
 
-  // ── 4B. TENTATIVA REAL — cascata de estratégias anti-CORS ────────────────
-  //
-  // O DataJud bloqueia chamadas diretas do browser (CORS).
-  // Tentamos 3 estratégias em ordem, da mais direta à de contingência:
-  //
-  //  1. Direto ao DataJud (funciona em ambientes com CORS permissivo / extensão)
-  //  2. Proxy CORS público gratuito (corsproxy.io)
-  //  3. Proxy alternativo (api.allorigins.win)
-  //  4. Mock inteligente (nunca falha — último recurso)
+  // ── 4B. CHAMADA REAL VIA CLOUDFLARE WORKER ───────────────────────────────
+  // O Worker em misty-hall-12d1.fernanda-gab-abranches.workers.dev
+  // já injeta o header Authorization e resolve o CORS server-side.
+  // Chamada simples, sem proxies adicionais.
 
   const payload = JSON.stringify({
     query: { match: { numeroProcesso: parsed.numeroLimpo } }
   });
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `APIKey ${apiKey}`
-  };
+  btnText.textContent = 'Consultando DataJud...';
 
-  // Estratégias de acesso — cada uma retorna {hits} ou lança erro
-  const estrategias = [
-    // 1. Chamada direta
-    async () => {
-      const r = await fetch(parsed.endpoint, { method:'POST', headers, body: payload });
-      if (!r.ok) throw new Error(`HTTP_${r.status}`);
-      return (await r.json())?.hits?.hits || [];
-    },
-    // 2. corsproxy.io — proxy CORS gratuito e confiável
-    async () => {
-      const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(parsed.endpoint);
-      const r = await fetch(proxyUrl, { method:'POST', headers, body: payload });
-      if (!r.ok) throw new Error(`HTTP_${r.status}`);
-      return (await r.json())?.hits?.hits || [];
-    },
-    // 3. allorigins — alternativa gratuita
-    async () => {
-      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(parsed.endpoint);
-      const r = await fetch(proxyUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-requested-with': 'XMLHttpRequest' },
-        body: payload
-      });
-      if (!r.ok) throw new Error(`HTTP_${r.status}`);
-      return (await r.json())?.hits?.hits || [];
+  try {
+    const resp = await fetch(parsed.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload
+    });
+
+    if (resp.status === 401 || resp.status === 403) throw new Error('AUTH');
+    if (!resp.ok) throw new Error(`HTTP_${resp.status}`);
+
+    const data = await resp.json();
+    const hits = data?.hits?.hits || [];
+
+    if (hits.length === 0) {
+      djClearState();
+      djShowError(
+        '🔍 Processo não encontrado',
+        `Nenhum processo com o número <strong>${djEsc(parsed.original)}</strong> foi localizado no ` +
+        `<strong>${parsed.tribunal.nome}</strong>.<br><br>` +
+        `Verifique se o número está correto e se o processo está digitalizado no DataJud/CNJ.`
+      );
+    } else {
+      mostrarResultado(hits, false);
     }
-  ];
 
-  for (let i = 0; i < estrategias.length; i++) {
-    try {
-      btnText.textContent = i === 0 ? 'Conectando...' : `Tentativa ${i+1}/3...`;
-      const hits = await Promise.race([
-        estrategias[i](),
-        new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 7000))
-      ]);
-
-      // ✅ Sucesso — retorna dados reais
-      if (hits.length === 0) {
-        // Processo não encontrado na base real → mock com aviso
-        mostrarResultado([djGerarMock(parsed)], true);
-      } else {
-        mostrarResultado(hits, false);
-      }
-      btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
-      return;
-
-    } catch (err) {
-      if (err.message === 'AUTH' || err.message === 'HTTP_401' || err.message === 'HTTP_403') {
-        document.getElementById('djLoading').classList.remove('show');
-        djShowError('🔑 API Key inválida',
-          'Chave rejeitada pelo DataJud. Verifique em ' +
-          '<a href="https://datajud-wiki.cnj.jus.br" target="_blank" style="color:var(--gold)">datajud-wiki.cnj.jus.br</a>.');
-        btn.disabled = false; btnIcon.textContent = '🔍'; btnText.textContent = 'Consultar';
-        return;
-      }
-      // CORS / timeout / rede → tenta próxima estratégia
-      console.log(`[DataJud] Estratégia ${i+1} falhou: ${err.message}. Tentando próxima...`);
+  } catch (err) {
+    if (err.message === 'AUTH') {
+      djClearState();
+      djShowError('🔑 API Key inválida',
+        'A chave foi rejeitada pelo DataJud. Verifique a configuração do Cloudflare Worker.');
+    } else if (err.name === 'TypeError' || err.message.includes('fetch') || err.message.includes('timeout')) {
+      // Worker offline ou sem conexão → fallback mock
+      console.log('[DataJud] Worker inacessível, usando modo demonstração:', err.message);
+      mostrarResultado([djGerarMock(parsed)], true);
+    } else {
+      djClearState();
+      djShowError(`Erro (${err.message})`,
+        'Tente novamente. Se o problema persistir, verifique o Cloudflare Worker.');
     }
   }
-
-  // ── 4C. CONTINGÊNCIA FINAL: Mock (todas as estratégias falharam) ──────────
-  await new Promise(r => setTimeout(r, 600));
-  mostrarResultado([djGerarMock(parsed)], true);
 
   btn.disabled = false;
   btnIcon.textContent = '🔍';
