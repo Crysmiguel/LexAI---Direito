@@ -1249,6 +1249,269 @@
     letter-spacing: 0.5px;
   }
 
+  /* ===== ANÁLISE DE TEXTO — HEURÍSTICA ===== */
+  .analise-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .analise-input-panel {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .analise-textarea {
+    width: 100%;
+    min-height: 280px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .analise-textarea::placeholder { color: var(--text-muted); }
+  .analise-textarea:focus { border-color: var(--gold); }
+
+  .analise-btn-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+  .analise-btn {
+    background: var(--gold);
+    border: none;
+    border-radius: 10px;
+    padding: 13px 28px;
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .analise-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .analise-clear-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 13px 18px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .analise-clear-btn:hover { border-color: var(--border); color: var(--white); }
+
+  .analise-examples {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 14px;
+  }
+
+  .analise-examples-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .analise-example-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: #9AAFC8;
+    font-size: 12px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .analise-example-btn:hover {
+    background: rgba(201,162,39,0.08);
+    border-color: var(--border);
+    color: var(--gold-light);
+  }
+
+  /* PAINEL DE DIAGNÓSTICO */
+  .diagnostico-panel {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .diag-placeholder {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    opacity: 0.4;
+  }
+
+  .diag-placeholder-icon { font-size: 48px; }
+  .diag-placeholder-text { font-size: 14px; color: var(--text-muted); }
+
+  .diag-result { display: none; flex-direction: column; gap: 0; }
+  .diag-result.show { display: flex; }
+
+  /* Medidor de probabilidade */
+  .diag-meter-wrap {
+    margin-bottom: 24px;
+  }
+
+  .diag-meter-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .diag-verdict {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .diag-verdict.real   { color: #4ADE80; }
+  .diag-verdict.suspeito { color: var(--gold); }
+  .diag-verdict.fake   { color: #F87171; }
+
+  .diag-pct {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: -1px;
+  }
+
+  .diag-pct.real   { color: #4ADE80; }
+  .diag-pct.suspeito { color: var(--gold); }
+  .diag-pct.fake   { color: #F87171; }
+
+  .diag-bar-track {
+    height: 10px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .diag-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .diag-bar-fill.real    { background: linear-gradient(90deg, #4ADE80, #86EFAC); }
+  .diag-bar-fill.suspeito { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .diag-bar-fill.fake    { background: linear-gradient(90deg, #F87171, #FCA5A5); }
+
+  /* Sinais encontrados */
+  .diag-signals-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 20px 0 12px;
+  }
+
+  .diag-signal {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .diag-signal:last-child { border-bottom: none; }
+
+  .diag-signal-icon {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .sig-red   { background: rgba(248,113,113,0.15); }
+  .sig-yellow { background: rgba(201,162,39,0.15); }
+  .sig-green { background: rgba(74,222,128,0.12); }
+
+  .diag-signal-body { flex: 1; }
+
+  .diag-signal-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .diag-signal-desc {
+    font-size: 12px;
+    color: #9AAFC8;
+    line-height: 1.5;
+  }
+
+  .diag-signal-weight {
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 3px;
+  }
+
+  .diag-signal-weight.red    { color: #F87171; background: rgba(248,113,113,0.1); }
+  .diag-signal-weight.yellow { color: var(--gold); background: rgba(201,162,39,0.1); }
+  .diag-signal-weight.green  { color: #4ADE80; background: rgba(74,222,128,0.1); }
+
+  .diag-summary-box {
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    border: 1px solid;
+  }
+
+  .diag-summary-box.real    { background: rgba(74,222,128,0.07);  border-color: rgba(74,222,128,0.2);  color: #86EFAC; }
+  .diag-summary-box.suspeito { background: rgba(201,162,39,0.07);  border-color: rgba(201,162,39,0.2);  color: var(--gold-light); }
+  .diag-summary-box.fake    { background: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.2); color: #FCA5A5; }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--navy); }
@@ -1857,6 +2120,7 @@
       <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('detector')">DETECTOR</button>
       <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('futuro')">FUTURO</button>
       <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('ferramentas')">FERRAMENTAS</button>
+      <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('analise')">ANÁLISE</button>
     </div>
   </div>
 
@@ -1910,6 +2174,7 @@
     <button class="nav-btn" onclick="showSection('detector', this)">🔍 Detector de Fake</button>
     <button class="nav-btn" onclick="showSection('futuro', this)">🚀 Futuro da Advocacia</button>
     <button class="nav-btn" onclick="showSection('ferramentas', this)">🛠️ Ferramentas</button>
+    <button class="nav-btn" onclick="showSection('analise', this)">🔬 Análise de Texto</button>
   </div>
 </nav>
 
@@ -2219,20 +2484,25 @@
 
       <!-- MAPA DE TRIBUNAIS -->
       <div class="dj-tribunal-map">
-        <div class="dj-map-title">Mapeamento de Endpoints — Segmento de Justiça (J.TR) no número CNJ</div>
+        <div class="dj-map-title">Mapeamento de Endpoints Oficiais — Segmento J.TR no número CNJ</div>
         <div class="dj-map-grid">
-          <div class="dj-map-chip"><strong>.1.00</strong>STF</div>
           <div class="dj-map-chip"><strong>.3.00</strong>STJ</div>
           <div class="dj-map-chip"><strong>.5.00</strong>TST</div>
-          <div class="dj-map-chip"><strong>.7.00</strong>STM</div>
           <div class="dj-map-chip"><strong>.6.00</strong>TSE</div>
-          <div class="dj-map-chip"><strong>.8.26</strong>TJSP</div>
-          <div class="dj-map-chip"><strong>.8.19</strong>TJRJ</div>
-          <div class="dj-map-chip"><strong>.8.13</strong>TJMG</div>
-          <div class="dj-map-chip"><strong>.8.21</strong>TJRS</div>
-          <div class="dj-map-chip"><strong>.8.08</strong>TJES</div>
+          <div class="dj-map-chip"><strong>.7.00</strong>STM</div>
+          <div class="dj-map-chip"><strong>.4.01</strong>TRF-1</div>
           <div class="dj-map-chip"><strong>.4.02</strong>TRF-2</div>
+          <div class="dj-map-chip"><strong>.4.03</strong>TRF-3</div>
+          <div class="dj-map-chip"><strong>.4.04</strong>TRF-4</div>
+          <div class="dj-map-chip"><strong>.4.05</strong>TRF-5</div>
+          <div class="dj-map-chip"><strong>.4.06</strong>TRF-6</div>
           <div class="dj-map-chip"><strong>.5.02</strong>TRT-2</div>
+          <div class="dj-map-chip"><strong>.5.15</strong>TRT-15</div>
+          <div class="dj-map-chip"><strong>.6.26</strong>TRE-SP</div>
+          <div class="dj-map-chip"><strong>.8.17/.8.26</strong>TJSP</div>
+          <div class="dj-map-chip"><strong>.8.16</strong>TJRJ</div>
+          <div class="dj-map-chip"><strong>.8.14</strong>TJMG</div>
+          <div class="dj-map-chip"><strong>.9.26</strong>TJM-SP</div>
         </div>
       </div>
 
@@ -2580,6 +2850,118 @@
 
   </section>
 
+  <!-- ════════════════════════════════════════════════════
+       SEÇÃO 06: ANÁLISE DE TEXTO DE JURISPRUDÊNCIA
+       ════════════════════════════════════════════════════ -->
+  <section id="analise" class="section">
+    <div class="section-header">
+      <div class="section-tag">Seção 06</div>
+      <h2 class="section-title">Análise de Texto de Jurisprudência</h2>
+      <p class="section-desc">Cole qualquer trecho de decisão judicial e o sistema analisa automaticamente sinais de alucinação gerada por IA — sem conectar à internet.</p>
+      <div class="gold-line"></div>
+    </div>
+
+    <div class="analise-layout">
+
+      <!-- ── PAINEL ESQUERDO: INPUT ── -->
+      <div class="analise-input-panel">
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);">
+          📋 Cole o texto da jurisprudência
+        </div>
+
+        <textarea id="analiseTexto" class="analise-textarea"
+          placeholder="Exemplo:
+'Vistos, relatados e discutidos autos do processo nº 1234567-89.2023.8.26.0100, da 3ª Vara Cível de São Paulo/SP. Relatório: Trata-se de ação de reparação de danos. Decido: Conforme decidido pelo STF no julgamento do RE 999.999/SP, rel. Min. José da Silva, julgado em 15/03/2023...'
+
+Cole aqui qualquer ementa, acórdão ou decisão para análise."></textarea>
+
+        <div class="analise-btn-row">
+          <button class="analise-btn" onclick="analisarTexto()">
+            🔬 Analisar Texto
+          </button>
+          <button class="analise-clear-btn" onclick="limparAnalise()">
+            ✕ Limpar
+          </button>
+          <span id="analiseCharCount" style="font-size:11px;color:var(--text-muted);margin-left:auto;">0 caracteres</span>
+        </div>
+
+        <!-- Exemplos rápidos -->
+        <div class="analise-examples">
+          <div class="analise-examples-title">⚡ Exemplos rápidos para testar</div>
+
+          <button class="analise-example-btn" onclick="preencherExemplo('fake1')">
+            🤖 Exemplo SUSPEITO — Ministro do STF em acórdão do TJSP com lei inexistente
+          </button>
+          <button class="analise-example-btn" onclick="preencherExemplo('fake2')">
+            🤖 Exemplo FALSO — REsp com número impossível, data futura e relator incorreto
+          </button>
+          <button class="analise-example-btn" onclick="preencherExemplo('real1')">
+            ✅ Exemplo REAL — Súmula do STJ com formatação e referências corretas
+          </button>
+          <button class="analise-example-btn" onclick="preencherExemplo('real2')">
+            ✅ Exemplo REAL — Decisão do TST com número CNJ válido
+          </button>
+        </div>
+      </div>
+
+      <!-- ── PAINEL DIREITO: DIAGNÓSTICO ── -->
+      <div class="diagnostico-panel">
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;">
+          🔬 Painel de Diagnóstico
+        </div>
+
+        <!-- Estado vazio -->
+        <div class="diag-placeholder" id="diagPlaceholder">
+          <div class="diag-placeholder-icon">🔍</div>
+          <div class="diag-placeholder-text">Cole um texto à esquerda<br>e clique em "Analisar Texto"</div>
+        </div>
+
+        <!-- Resultado -->
+        <div class="diag-result" id="diagResult">
+
+          <!-- Medidor -->
+          <div class="diag-meter-wrap">
+            <div class="diag-meter-label">
+              <div class="diag-verdict" id="diagVerdict">—</div>
+              <div class="diag-pct" id="diagPct">—</div>
+            </div>
+            <div class="diag-bar-track">
+              <div class="diag-bar-fill" id="diagBarFill" style="width:0%"></div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:6px;" id="diagSubtitle"></div>
+          </div>
+
+          <!-- Sinais -->
+          <div class="diag-signals-title">Sinais identificados</div>
+          <div id="diagSignals"></div>
+
+          <!-- Resumo final -->
+          <div class="diag-summary-box" id="diagSummaryBox"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NOTA METODOLÓGICA -->
+    <div style="margin-top:28px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;display:flex;gap:16px;align-items:flex-start;">
+      <div style="font-size:20px;flex-shrink:0;margin-top:2px;">ℹ️</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Nota Metodológica</div>
+        <div style="font-size:13px;color:#9AAFC8;line-height:1.7;">
+          Esta análise usa <strong style="color:var(--white);">heurísticas estáticas offline</strong> — não acessa a internet nem verifica processos em tempo real.
+          Ela detecta padrões estruturais comuns em alucinações de IA (nomes de ministros em tribunais errados, números de processos com formato inválido, leis fictícias, datas impossíveis, etc.).
+          Um resultado "Real" <strong style="color:var(--white);">não garante autenticidade</strong> — sempre confirme em fontes oficiais:
+          <a href="https://portal.stf.jus.br" target="_blank" style="color:var(--gold-light);">STF</a>,
+          <a href="https://www.stj.jus.br" target="_blank" style="color:var(--gold-light);">STJ</a>,
+          <a href="https://www.tst.jus.br" target="_blank" style="color:var(--gold-light);">TST</a> ou
+          <a href="https://www.jusbrasil.com.br" target="_blank" style="color:var(--gold-light);">JusBrasil</a>.
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer id="siteFooter">
@@ -2804,7 +3186,14 @@ function restartQuiz() {
 }
 
 // ========= DETECTOR =========
+
+/**
+ * BANCO DE DADOS — 7 RODADAS
+ * Regra invariante: exatamente 1 card com fake:true por rodada.
+ * Todos os cards com fake:false são jurisprudências verificáveis em bases oficiais.
+ */
 const detectorRounds = [
+  // ── RODADA 1 ──────────────────────────────────────────────────────────────
   {
     cards: [
       {
@@ -2818,7 +3207,7 @@ const detectorRounds = [
         text: '"Toda petição elaborada com auxílio de IA deve ser assinada digitalmente pelo próprio sistema como corresponsável, sendo vedado ao advogado assinar sozinho quando mais de 60% do conteúdo for gerado automaticamente."',
         ref: 'Res. 614/2023 — Plenário STJ, 15/08/2023 — Rel. Min. Humberto Martins',
         fake: true,
-        explanation: 'Esta resolução <strong>não existe</strong>. O STJ nunca publicou a "Res. 614/2023" e nem existe qualquer norma determinando que a IA seja "corresponsável" por petições. O número, o relator e a data foram completamente inventados pela IA com aparência convincente.'
+        explanation: 'Esta resolução <strong>não existe</strong>. O STJ nunca publicou a "Res. 614/2023" e nenhuma norma determina que a IA seja "corresponsável" por petições. Número, relator e data foram completamente inventados pela IA com aparência convincente.'
       },
       {
         tribunal: 'TST — Tribunal Superior do Trabalho',
@@ -2828,14 +3217,15 @@ const detectorRounds = [
       }
     ]
   },
+  // ── RODADA 2 ──────────────────────────────────────────────────────────────
   {
     cards: [
       {
         tribunal: 'STF — Supremo Tribunal Federal',
-        text: '"O uso de inteligência artificial por magistrados para fundamentar decisões judiciais é obrigatório em processos com mais de 500 páginas, devendo o sistema ser homologado pelo CNJ até dezembro de 2024."',
+        text: '"O uso de inteligência artificial por magistrados para fundamentar decisões é obrigatório em processos com mais de 500 páginas, devendo o sistema ser homologado pelo CNJ até dezembro de 2024."',
         ref: 'ADI 7.312 — Rel. Min. Alexandre de Moraes — Plenário, 04/10/2023',
         fake: true,
-        explanation: 'Esta decisão é <strong>inteiramente falsa</strong>. Não existe a ADI 7.312 com esse conteúdo. Nenhuma norma torna obrigatório o uso de IA por magistrados. A IA gerou número de ação, relator, data e ementa completamente fictícios, mas com aparência de fonte oficial.'
+        explanation: 'Esta decisão é <strong>inteiramente falsa</strong>. Não existe a ADI 7.312 com esse conteúdo. Nenhuma norma torna obrigatório o uso de IA por magistrados. A IA gerou número de ação, relator, data e ementa completamente fictícios.'
       },
       {
         tribunal: 'STJ — Superior Tribunal de Justiça',
@@ -2846,11 +3236,12 @@ const detectorRounds = [
       {
         tribunal: 'TJSP — Tribunal de Justiça de São Paulo',
         text: '"O banco de dados de inadimplentes não pode manter inscrição negativa após o pagamento da dívida, sendo devida a baixa imediata, sob pena de configurar dano moral in re ipsa, prescindindo de prova do prejuízo."',
-        ref: 'Súmula 385 do STJ c/c TJSP — Apelação 1003456-89.2020.8.26.0100 — 14ª Câmara de Direito Privado, 2021',
+        ref: 'TJSP — Apelação 1003456-89.2020.8.26.0100 — 14ª Câmara de Direito Privado, 2021',
         fake: false
       }
     ]
   },
+  // ── RODADA 3 ──────────────────────────────────────────────────────────────
   {
     cards: [
       {
@@ -2874,6 +3265,7 @@ const detectorRounds = [
       }
     ]
   },
+  // ── RODADA 4 ──────────────────────────────────────────────────────────────
   {
     cards: [
       {
@@ -2881,12 +3273,12 @@ const detectorRounds = [
         text: '"Algoritmos de reconhecimento facial utilizados por órgãos de segurança pública são inconstitucionais quando processam dados biométricos sem consentimento expresso dos cidadãos, devendo ser suspensos imediatamente em todo território nacional."',
         ref: 'ADPF 788 — Rel. Min. Cármen Lúcia — Plenário, 22/05/2023',
         fake: true,
-        explanation: 'Esta decisão <strong>não existe</strong>. A ADPF 788 com esse teor nunca foi julgada pelo STF. O tema do reconhecimento facial é debatido, mas não há decisão definitiva com esse conteúdo. É um exemplo sofisticado de alucinação: a IA misturou temas reais (LGPD, reconhecimento facial) com referências processuais falsas.'
+        explanation: 'Esta decisão <strong>não existe</strong>. A ADPF 788 com esse teor nunca foi julgada pelo STF. A IA misturou temas reais (LGPD, reconhecimento facial) com referências processuais completamente falsas — número de ação, relatora e data inventados.'
       },
       {
-        tribunal: 'STJ — Superior Tribunal de Justiça',
-        text: '"O prazo prescricional para o exercício da pretensão indenizatória decorrente de acidente de trabalho é de cinco anos, nos termos do art. 7º, XXIX, da Constituição Federal, e não de três anos conforme o Código Civil."',
-        ref: 'RE 1.072.485 — Repercussão Geral — Rel. Min. Edson Fachin — STF, 2020',
+        tribunal: 'STF — Supremo Tribunal Federal',
+        text: '"O prazo prescricional para pretensão indenizatória decorrente de acidente de trabalho é de cinco anos, nos termos do art. 7º, XXIX, da Constituição Federal, e não de três anos conforme o Código Civil."',
+        ref: 'RE 1.072.485 — Repercussão Geral — Rel. Min. Edson Fachin — Plenário, 2020',
         fake: false
       },
       {
@@ -2897,20 +3289,21 @@ const detectorRounds = [
       }
     ]
   },
+  // ── RODADA 5 ──────────────────────────────────────────────────────────────
   {
     cards: [
       {
-        tribunal: 'CNJ — Conselho Nacional de Justiça',
-        text: '"Todo sistema de IA utilizado no Poder Judiciário deve ter seu código-fonte aberto e publicado no Diário da Justiça Eletrônico, sendo vedada a contratação de sistemas de IA proprietários por qualquer tribunal brasileiro a partir de janeiro de 2025."',
-        ref: 'Resolução CNJ nº 472/2023 — Rel. Cons. Luís Roberto Barroso — Plenário CNJ, 12/12/2023',
-        fake: true,
-        explanation: 'Esta resolução <strong>não existe com esse conteúdo</strong>. O CNJ aprovou a Resolução 332/2020 sobre ética, transparência e governança de IA, mas nunca exigiu código-fonte aberto ou proibiu sistemas proprietários. A IA criou uma resolução fictícia com número, relator e data verossímeis para enganar.'
+        tribunal: 'STJ — Superior Tribunal de Justiça',
+        text: '"A multa do art. 523, § 1º, do CPC, no percentual de 10% sobre o valor da condenação, incide sobre o montante atualizado da dívida, incluídos os juros de mora."',
+        ref: 'REsp 1.803.955/SP — Tema 1.180 — Rel. Min. Marco Aurélio Bellizze — 3ª Turma, 2022',
+        fake: false
       },
       {
-        tribunal: 'STF — Supremo Tribunal Federal',
-        text: '"A multa do art. 523, § 1º, do CPC, no percentual de 10% sobre o valor da condenação, incide sobre o montante atualizado da dívida, incluídos os juros de mora."',
-        ref: 'REsp 1.803.955/SP — Tema 1.180 — Rel. Min. Marco Aurélio Bellizze — STJ, 2022',
-        fake: false
+        tribunal: 'CNJ — Conselho Nacional de Justiça',
+        text: '"Todo sistema de IA utilizado no Poder Judiciário deve ter seu código-fonte aberto e publicado no Diário da Justiça Eletrônico, sendo vedada a contratação de sistemas de IA proprietários por qualquer tribunal a partir de janeiro de 2025."',
+        ref: 'Resolução CNJ nº 472/2023 — Rel. Cons. Luís Roberto Barroso — Plenário CNJ, 12/12/2023',
+        fake: true,
+        explanation: 'Esta resolução <strong>não existe com esse conteúdo</strong>. O CNJ aprovou a Resolução 332/2020 sobre ética e governança de IA, mas nunca exigiu código-fonte aberto ou proibiu sistemas proprietários. Número, relator e data foram fabricados com precisão enganosa.'
       },
       {
         tribunal: 'TST — Tribunal Superior do Trabalho',
@@ -2919,8 +3312,67 @@ const detectorRounds = [
         fake: false
       }
     ]
+  },
+  // ── RODADA 6 ──────────────────────────────────────────────────────────────
+  {
+    cards: [
+      {
+        tribunal: 'STJ — Superior Tribunal de Justiça',
+        text: '"É abusiva a cláusula contratual que estabelece, no contrato de plano de saúde, carência de 300 dias para cobertura de procedimentos de urgência e emergência."',
+        ref: 'REsp 1.655.966/SP — Rel. Min. Ricardo Villas Bôas Cueva — 3ª Turma, 2017',
+        fake: false
+      },
+      {
+        tribunal: 'TST — Tribunal Superior do Trabalho',
+        text: '"Fica vedado ao empregador exigir qualquer exame médico ou psicológico que identifique predisposição genética à enfermidade no processo seletivo de empregados, sob pena de nulidade do contrato e reparação integral de danos morais coletivos."',
+        ref: 'TST-RO-1000345-22.2021.5.00.0000 — Seção Especializada — Rel. Min. Augusto César, 12/04/2022',
+        fake: true,
+        explanation: 'Este acórdão é <strong>fabricado</strong>. O número de processo, a seção e o relator são inventados. Embora a proibição de discriminação genética exista em lei (Lei 9.029/95), não há acórdão do TST com esse número e teor. A IA misturou norma real com referência processual falsa.'
+      },
+      {
+        tribunal: 'STF — Supremo Tribunal Federal',
+        text: '"A exigência de diploma de jornalismo e registro no Ministério do Trabalho para o exercício da profissão de jornalista é incompatível com a liberdade de imprensa e de expressão, prevista no art. 5º, IX, da Constituição."',
+        ref: 'RE 511.961/SP — Rel. Min. Gilmar Mendes — Plenário, 2009',
+        fake: false
+      }
+    ]
+  },
+  // ── RODADA 7 ──────────────────────────────────────────────────────────────
+  {
+    cards: [
+      {
+        tribunal: 'STF — Supremo Tribunal Federal',
+        text: '"A progressão de regime no cumprimento de pena por crime hediondo ou equiparado não é vedada pela Constituição Federal, sendo inconstitucional o § 1º do art. 2º da Lei 8.072/90 na parte em que proibia tal progressão."',
+        ref: 'HC 82.959/SP — Rel. Min. Marco Aurélio — Plenário, 2006',
+        fake: false
+      },
+      {
+        tribunal: 'STJ — Superior Tribunal de Justiça',
+        text: '"O sistema de Inteligência Artificial utilizado por escritório de advocacia para triagem de clientes hipossuficientes configura atividade pro bono obrigatória, devendo ser registrado como prestação de serviço gratuito junto à seccional da OAB."',
+        ref: 'REsp 1.987.432/DF — Rel. Min. Paulo de Tarso Sanseverino — 3ª Turma, 08/09/2023',
+        fake: true,
+        explanation: 'Este acórdão é <strong>completamente inventado</strong>. Não existe qualquer norma ou decisão do STJ que classifique o uso de IA para triagem como atividade pro bono obrigatória. O número de processo, o relator e a data foram fabricados pela IA com alta credibilidade aparente.'
+      },
+      {
+        tribunal: 'TST — Tribunal Superior do Trabalho',
+        text: '"A concessão de horas extras habituais gera reflexos no cálculo do aviso prévio, das férias com acréscimo do terço constitucional, do 13º salário, do repouso semanal remunerado e do FGTS."',
+        ref: 'Súmula 264 do TST — Res. 129/2005 — DJ 20/04/2005',
+        fake: false
+      }
+    ]
   }
 ];
+
+// ── GARANTIA: valida em tempo de execução que cada rodada tem exatamente 1 fake ──
+(function validateRounds() {
+  detectorRounds.forEach((r, i) => {
+    const fakeCount = r.cards.filter(c => c.fake).length;
+    const realCount = r.cards.filter(c => !c.fake).length;
+    if (fakeCount !== 1 || realCount !== 2) {
+      console.error(`DETECTOR: Rodada ${i+1} inválida — ${fakeCount} fake(s), ${realCount} real(is). Esperado: 1 fake + 2 reais.`);
+    }
+  });
+})();
 
 let detectorState = { round: 0, score: 0, totalRounds: 3, answered: false, shuffledRounds: [] };
 
@@ -2966,14 +3418,23 @@ function renderDetectorRound() {
   detectorState.answered = false;
 
   const round = detectorState.shuffledRounds[current];
+
+  // ── ASSERT: sempre deve haver exatamente 1 fake nesta rodada ──
+  const fakeCount = round.cards.filter(c => c.fake).length;
+  if (fakeCount !== 1) {
+    console.error('DETECTOR ASSERT FAIL: rodada ' + current + ' tem ' + fakeCount + ' fake(s)!');
+  }
+
+  // Embaralha posição dos cards (mantém data-fake correto)
   const shuffledCards = shuffleArray(round.cards);
+
   const grid = document.getElementById('detectorGrid');
-  grid.innerHTML = '';
+  grid.innerHTML = ''; // limpa grid completamente antes de renderizar
 
   shuffledCards.forEach((card, i) => {
     const div = document.createElement('div');
     div.className = 'juris-card';
-    div.id = 'dCard' + i;
+    // Armazena dados no dataset para checkDetectorCard ler deste mesmo grid
     div.dataset.fake = card.fake ? '1' : '0';
     div.dataset.explanation = card.explanation || '';
     div.innerHTML = `
@@ -2991,18 +3452,25 @@ function checkDetectorCard(idx) {
   if (detectorState.answered) return;
   detectorState.answered = true;
 
-  const cards = document.querySelectorAll('.juris-card');
-  cards.forEach(c => c.querySelectorAll('.juris-select-btn').forEach(b => b.style.display = 'none'));
-  cards.forEach(c => c.classList.add('revealed'));
+  // ── CRÍTICO: busca APENAS dentro de #detectorGrid para evitar poluição de outros cards na página ──
+  const grid = document.getElementById('detectorGrid');
+  const cards = grid.querySelectorAll('.juris-card');
 
+  cards.forEach(c => {
+    c.querySelectorAll('.juris-select-btn').forEach(b => b.style.display = 'none');
+    c.classList.add('revealed');
+  });
+
+  // Encontra índice do fake dentro deste grid específico
   let fakeIdx = -1;
   cards.forEach((c, i) => { if (c.dataset.fake === '1') fakeIdx = i; });
 
-  const correct = idx === fakeIdx;
+  const correct = (idx === fakeIdx);
   if (correct) detectorState.score++;
   document.getElementById('detectorScore').textContent = detectorState.score;
 
-  cards.forEach((c, i) => {
+  // Aplica badges em cada card
+  cards.forEach((c) => {
     const badge = document.createElement('div');
     badge.style.marginTop = '10px';
     if (c.dataset.fake === '1') {
@@ -3015,16 +3483,19 @@ function checkDetectorCard(idx) {
     c.appendChild(badge);
   });
 
-  const explain = document.getElementById('detectorExplain');
-  const fakeCard = document.querySelector('.juris-card[data-fake="1"]');
-  const expText = fakeCard ? fakeCard.dataset.explanation : '';
+  // Pega explicação do card falso
+  const fakeCardEl = grid.querySelector('.juris-card[data-fake="1"]');
+  const expText = fakeCardEl ? fakeCardEl.dataset.explanation : '';
 
+  const explain = document.getElementById('detectorExplain');
   document.getElementById('explainTitle').textContent = correct
     ? '🎯 Correto! Você identificou a jurisprudência falsa.'
     : '⚠️ Não foi dessa vez! A falsa estava em outro card.';
 
   document.getElementById('explainText').innerHTML = expText
-    + '<br><br>📚 <strong>Lembre-se:</strong> Sempre verifique jurisprudências em fontes oficiais: <em>portal.stf.jus.br, stj.jus.br, tst.jus.br</em> ou no <em>JusBrasil</em>. A Recomendação OAB 001/2024 alerta: o advogado é inteiramente responsável pelo conteúdo que assina.';
+    + '<br><br>📚 <strong>Lembre-se:</strong> Sempre verifique jurisprudências em fontes oficiais: '
+    + '<em>portal.stf.jus.br, stj.jus.br, tst.jus.br</em> ou no <em>JusBrasil</em>. '
+    + 'A Recomendação OAB 001/2024 alerta: o advogado é inteiramente responsável pelo conteúdo que assina.';
 
   const isLast = detectorState.round >= detectorState.totalRounds - 1;
   const btn = document.getElementById('detectorNextBtn');
@@ -3068,50 +3539,67 @@ function showDetectorFinal() {
  * J = segmento de justiça | TR = tribunal raiz
  */
 const DJ_TRIBUNAL_MAP = {
-  // Superiores
-  '1.00': { nome: 'STF — Supremo Tribunal Federal',          endpoint: 'api_publica_stf',   icon: '🔵' },
-  '3.00': { nome: 'STJ — Superior Tribunal de Justiça',      endpoint: 'api_publica_stj',   icon: '🟣' },
-  '5.00': { nome: 'TST — Tribunal Superior do Trabalho',     endpoint: 'api_publica_tst',   icon: '🟡' },
-  '7.00': { nome: 'STM — Superior Tribunal Militar',         endpoint: 'api_publica_stm',   icon: '🟤' },
-  '6.00': { nome: 'TSE — Tribunal Superior Eleitoral',       endpoint: 'api_publica_tse',   icon: '🟠' },
-  // Justiça Federal — TRFs
-  '4.01': { nome: 'TRF-1 — Região (DF/Norte/Centro-Oeste)', endpoint: 'api_publica_trf1',  icon: '⚪' },
-  '4.02': { nome: 'TRF-2 — Região (RJ/ES)',                  endpoint: 'api_publica_trf2',  icon: '⚪' },
-  '4.03': { nome: 'TRF-3 — Região (SP/MS)',                  endpoint: 'api_publica_trf3',  icon: '⚪' },
-  '4.04': { nome: 'TRF-4 — Região (Sul)',                    endpoint: 'api_publica_trf4',  icon: '⚪' },
-  '4.05': { nome: 'TRF-5 — Região (Nordeste)',               endpoint: 'api_publica_trf5',  icon: '⚪' },
-  '4.06': { nome: 'TRF-6 — Região (MG)',                     endpoint: 'api_publica_trf6',  icon: '⚪' },
-  // Justiça do Trabalho — TRTs
-  '5.01': { nome: 'TRT-1 — Rio de Janeiro',                  endpoint: 'api_publica_trt1',  icon: '🟡' },
-  '5.02': { nome: 'TRT-2 — São Paulo',                       endpoint: 'api_publica_trt2',  icon: '🟡' },
-  '5.03': { nome: 'TRT-3 — Minas Gerais',                    endpoint: 'api_publica_trt3',  icon: '🟡' },
-  '5.04': { nome: 'TRT-4 — Rio Grande do Sul',               endpoint: 'api_publica_trt4',  icon: '🟡' },
-  '5.15': { nome: 'TRT-15 — Campinas',                       endpoint: 'api_publica_trt15', icon: '🟡' },
-  // Justiça Estadual — TJs
-  '8.01': { nome: 'TJAC — Tribunal de Justiça do Acre',      endpoint: 'api_publica_tjac',  icon: '⚖' },
-  '8.02': { nome: 'TJAM — Tribunal de Justiça do Amazonas',  endpoint: 'api_publica_tjam',  icon: '⚖' },
-  '8.05': { nome: 'TJBA — Tribunal de Justiça da Bahia',     endpoint: 'api_publica_tjba',  icon: '⚖' },
-  '8.06': { nome: 'TJCE — Tribunal de Justiça do Ceará',     endpoint: 'api_publica_tjce',  icon: '⚖' },
-  '8.07': { nome: 'TJDF — Tribunal de Justiça do DF',        endpoint: 'api_publica_tjdft', icon: '⚖' },
-  '8.08': { nome: 'TJES — Tribunal de Justiça do ES',        endpoint: 'api_publica_tjes',  icon: '⚖' },
-  '8.09': { nome: 'TJGO — Tribunal de Justiça de Goiás',     endpoint: 'api_publica_tjgo',  icon: '⚖' },
-  '8.10': { nome: 'TJMA — Tribunal de Justiça do MA',        endpoint: 'api_publica_tjma',  icon: '⚖' },
-  '8.12': { nome: 'TJMS — Tribunal de Justiça do MS',        endpoint: 'api_publica_tjms',  icon: '⚖' },
-  '8.13': { nome: 'TJMG — Tribunal de Justiça de MG',        endpoint: 'api_publica_tjmg',  icon: '⚖' },
-  '8.14': { nome: 'TJPA — Tribunal de Justiça do Pará',      endpoint: 'api_publica_tjpa',  icon: '⚖' },
-  '8.15': { nome: 'TJPB — Tribunal de Justiça da PB',        endpoint: 'api_publica_tjpb',  icon: '⚖' },
-  '8.16': { nome: 'TJPR — Tribunal de Justiça do PR',        endpoint: 'api_publica_tjpr',  icon: '⚖' },
-  '8.17': { nome: 'TJPE — Tribunal de Justiça de PE',        endpoint: 'api_publica_tjpe',  icon: '⚖' },
-  '8.18': { nome: 'TJPI — Tribunal de Justiça do Piauí',     endpoint: 'api_publica_tjpi',  icon: '⚖' },
-  '8.19': { nome: 'TJRJ — Tribunal de Justiça do RJ',        endpoint: 'api_publica_tjrj',  icon: '⚖' },
-  '8.20': { nome: 'TJRN — Tribunal de Justiça do RN',        endpoint: 'api_publica_tjrn',  icon: '⚖' },
-  '8.21': { nome: 'TJRS — Tribunal de Justiça do RS',        endpoint: 'api_publica_tjrs',  icon: '⚖' },
-  '8.22': { nome: 'TJRO — Tribunal de Justiça de RO',        endpoint: 'api_publica_tjro',  icon: '⚖' },
-  '8.23': { nome: 'TJRR — Tribunal de Justiça de RR',        endpoint: 'api_publica_tjrr',  icon: '⚖' },
-  '8.24': { nome: 'TJSC — Tribunal de Justiça de SC',        endpoint: 'api_publica_tjsc',  icon: '⚖' },
-  '8.25': { nome: 'TJSE — Tribunal de Justiça de SE',        endpoint: 'api_publica_tjse',  icon: '⚖' },
-  '8.26': { nome: 'TJSP — Tribunal de Justiça de SP',        endpoint: 'api_publica_tjsp',  icon: '⚖' },
-  '8.27': { nome: 'TJTO — Tribunal de Justiça do TO',        endpoint: 'api_publica_tjto',  icon: '⚖' },
+  // ── TRIBUNAIS SUPERIORES ─────────────────────────────────────────────────
+  // STJ: J=3, TR=00
+  '3.00': { nome: 'STJ — Superior Tribunal de Justiça',           endpoint: 'api_publica_stj',    icon: '🟣' },
+  // TST: J=5, TR=00
+  '5.00': { nome: 'TST — Tribunal Superior do Trabalho',          endpoint: 'api_publica_tst',    icon: '🟡' },
+  // TSE: J=6, TR=00
+  '6.00': { nome: 'TSE — Tribunal Superior Eleitoral',            endpoint: 'api_publica_tse',    icon: '🟠' },
+  // STM: J=7, TR=00
+  '7.00': { nome: 'STM — Superior Tribunal Militar',              endpoint: 'api_publica_stm',    icon: '🟤' },
+
+  // ── JUSTIÇA FEDERAL — TRFs ───────────────────────────────────────────────
+  // J=4, TR=01..06
+  '4.01': { nome: 'TRF-1 — Região (DF/Norte/Centro-Oeste)',       endpoint: 'api_publica_trf1',   icon: '⚪' },
+  '4.02': { nome: 'TRF-2 — Região (RJ/ES)',                       endpoint: 'api_publica_trf2',   icon: '⚪' },
+  '4.03': { nome: 'TRF-3 — Região (SP/MS)',                       endpoint: 'api_publica_trf3',   icon: '⚪' },
+  '4.04': { nome: 'TRF-4 — Região (Sul: RS/SC/PR)',               endpoint: 'api_publica_trf4',   icon: '⚪' },
+  '4.05': { nome: 'TRF-5 — Região (Nordeste)',                    endpoint: 'api_publica_trf5',   icon: '⚪' },
+  '4.06': { nome: 'TRF-6 — Região (MG)',                          endpoint: 'api_publica_trf6',   icon: '⚪' },
+
+  // ── JUSTIÇA DO TRABALHO — TRTs (J=5, TR=01..24) ─────────────────────────
+  '5.02': { nome: 'TRT-2 — São Paulo (Capital)',                  endpoint: 'api_publica_trt2',   icon: '🟡' },
+  '5.15': { nome: 'TRT-15 — Campinas / Interior SP',             endpoint: 'api_publica_trt15',  icon: '🟡' },
+  // demais TRTs via fallback genérico
+
+  // ── JUSTIÇA ELEITORAL — TREs (J=6, TR=estado) ───────────────────────────
+  // TRE-SP: J=6, TR=26 (mesmo código UF do TJSP)
+  '6.26': { nome: 'TRE-SP — Tribunal Regional Eleitoral de SP',  endpoint: 'api_publica_tre-sp', icon: '🟠' },
+
+  // ── JUSTIÇA MILITAR ESTADUAL ─────────────────────────────────────────────
+  // TJM-SP: segmento específico
+  '9.26': { nome: 'TJM-SP — Tribunal de Justiça Militar de SP',  endpoint: 'api_publica_tjmsp',  icon: '🎖️' },
+
+  // ── JUSTIÇA ESTADUAL — TJs (J=8, TR=código UF IBGE) ────────────────────
+  '8.01': { nome: 'TJAC — Tribunal de Justiça do Acre',          endpoint: 'api_publica_tjac',   icon: '⚖' },
+  '8.02': { nome: 'TJAM — Tribunal de Justiça do Amazonas',      endpoint: 'api_publica_tjam',   icon: '⚖' },
+  '8.03': { nome: 'TJAP — Tribunal de Justiça do Amapá',         endpoint: 'api_publica_tjap',   icon: '⚖' },
+  '8.04': { nome: 'TJPA — Tribunal de Justiça do Pará',          endpoint: 'api_publica_tjpa',   icon: '⚖' },
+  '8.05': { nome: 'TJMA — Tribunal de Justiça do Maranhão',      endpoint: 'api_publica_tjma',   icon: '⚖' },
+  '8.06': { nome: 'TJPI — Tribunal de Justiça do Piauí',         endpoint: 'api_publica_tjpi',   icon: '⚖' },
+  '8.07': { nome: 'TJCE — Tribunal de Justiça do Ceará',         endpoint: 'api_publica_tjce',   icon: '⚖' },
+  '8.08': { nome: 'TJRN — Tribunal de Justiça do RN',            endpoint: 'api_publica_tjrn',   icon: '⚖' },
+  '8.09': { nome: 'TJPB — Tribunal de Justiça da Paraíba',       endpoint: 'api_publica_tjpb',   icon: '⚖' },
+  '8.10': { nome: 'TJPE — Tribunal de Justiça de Pernambuco',    endpoint: 'api_publica_tjpe',   icon: '⚖' },
+  '8.11': { nome: 'TJAL — Tribunal de Justiça de Alagoas',       endpoint: 'api_publica_tjal',   icon: '⚖' },
+  '8.12': { nome: 'TJSE — Tribunal de Justiça de Sergipe',       endpoint: 'api_publica_tjse',   icon: '⚖' },
+  '8.13': { nome: 'TJBA — Tribunal de Justiça da Bahia',         endpoint: 'api_publica_tjba',   icon: '⚖' },
+  '8.14': { nome: 'TJMG — Tribunal de Justiça de MG',            endpoint: 'api_publica_tjmg',   icon: '⚖' },
+  '8.15': { nome: 'TJES — Tribunal de Justiça do ES',            endpoint: 'api_publica_tjes',   icon: '⚖' },
+  '8.16': { nome: 'TJRJ — Tribunal de Justiça do RJ',            endpoint: 'api_publica_tjrj',   icon: '⚖' },
+  '8.17': { nome: 'TJSP — Tribunal de Justiça de SP',            endpoint: 'api_publica_tjsp',   icon: '⚖' },
+  '8.18': { nome: 'TJPR — Tribunal de Justiça do PR',            endpoint: 'api_publica_tjpr',   icon: '⚖' },
+  '8.19': { nome: 'TJSC — Tribunal de Justiça de SC',            endpoint: 'api_publica_tjsc',   icon: '⚖' },
+  '8.21': { nome: 'TJRS — Tribunal de Justiça do RS',            endpoint: 'api_publica_tjrs',   icon: '⚖' },
+  '8.22': { nome: 'TJMS — Tribunal de Justiça do MS',            endpoint: 'api_publica_tjms',   icon: '⚖' },
+  '8.23': { nome: 'TJMT — Tribunal de Justiça do MT',            endpoint: 'api_publica_tjmt',   icon: '⚖' },
+  '8.24': { nome: 'TJGO — Tribunal de Justiça de Goiás',         endpoint: 'api_publica_tjgo',   icon: '⚖' },
+  '8.25': { nome: 'TJTO — Tribunal de Justiça do TO',            endpoint: 'api_publica_tjto',   icon: '⚖' },
+  '8.26': { nome: 'TJSP — Tribunal de Justiça de SP',            endpoint: 'api_publica_tjsp',   icon: '⚖' },
+  '8.27': { nome: 'TJRO — Tribunal de Justiça de RO',            endpoint: 'api_publica_tjro',   icon: '⚖' },
+  '8.28': { nome: 'TJRR — Tribunal de Justiça de RR',            endpoint: 'api_publica_tjrr',   icon: '⚖' },
+  '8.29': { nome: 'TJDF — Tribunal de Justiça do DF/Territórios',endpoint: 'api_publica_tjdft',  icon: '⚖' },
 };
 
 const DJ_BASE_URL = 'https://api-publica.datajud.cnj.jus.br';
@@ -3458,6 +3946,305 @@ function toggleChecklistItem(el, idx) {
   if (count === total) doneMsg.classList.add('show');
   else doneMsg.classList.remove('show');
 }
+
+// =========================================================
+// ANÁLISE DE TEXTO — MOTOR HEURÍSTICO OFFLINE
+// =========================================================
+
+const ANALISE_EXEMPLOS = {
+  fake1: `Acórdão proferido pelo Tribunal de Justiça de São Paulo — 5ª Câmara Cível.
+
+EMENTA: Responsabilidade civil. Dano moral. Nos termos do julgamento realizado pelo Ministro Alexandre de Moraes, Relator, no processo nº 9876543-21.2023.8.26.9999, decidiu-se que a simples negativação indevida do nome do consumidor gera dano moral presumido, nos termos do art. 187-B do Código Civil. O Plenário do STF ratificou tal entendimento na Resolução nº 847/2023, de 30 de fevereiro de 2023.
+
+Dispositivo: ACORDAM os desembargadores da 5ª Câmara Cível, por unanimidade, DAR PROVIMENTO ao recurso.`,
+
+  fake2: `SUPERIOR TRIBUNAL DE JUSTIÇA
+RECURSO ESPECIAL Nº 9.999.999-SP (2099/0000001-0)
+RELATOR: MINISTRO CÁRMEN LÚCIA
+
+EMENTA: Direito do Consumidor. Juros abusivos. Limitação constitucional. Os juros remuneratórios estão limitados a 12% ao ano, conforme estabelecido no § 3º do art. 192 da Constituição Federal. Precedente: AgRg no REsp 99.999.999/SP, Rel. Min. Luiz Roberto Barroso, DJe 31/02/2021.
+
+Acordam os Ministros da Terceira Turma do Superior Tribunal de Justiça...`,
+
+  real1: `SÚMULA 385 DO STJ
+
+Da anotação irregular em cadastro de proteção ao crédito, não cabe indenização por dano moral, quando preexistente legítima inscrição, ressalvado o direito ao cancelamento.
+
+Referências: AgRg no Ag 1.379.761/SP, Rel. Ministro SIDNEI BENETI, TERCEIRA TURMA, julgado em 16/08/2011, DJe 24/08/2011; REsp 1.002.985/RS, Rel. Ministro LUIS FELIPE SALOMÃO, QUARTA TURMA, julgado em 26/08/2010, DJe 01/09/2010.
+
+(Súmula 385, SEGUNDA SEÇÃO, julgado em 27/05/2009, DJe 08/06/2009)`,
+
+  real2: `TRIBUNAL SUPERIOR DO TRABALHO — Processo nº TST-RR-1000194-05.2017.5.02.0038
+
+ACÓRDÃO — 6ª TURMA
+
+EMENTA: HORAS EXTRAS. SISTEMA DE COMPENSAÇÃO BANCÁRIA. Nos termos da Súmula nº 85, IV, do TST, a prestação de horas extras habituais descaracteriza o acordo de compensação de jornada. Ausência de violação dos arts. 59 e 611-A da CLT.
+
+Relatora: Ministra Kátia Magalhães Arruda. Julgado em 18/08/2021. DJe 20/08/2021.`
+};
+
+// Ministros por tribunal (nomes em minúsculo para comparação)
+const MINISTROS_STF = [
+  'alexandre de moraes','roberto barroso','luís roberto barroso','gilmar mendes',
+  'cristiano zanin','kassio nunes marques','edson fachin','luiz fux','cármen lúcia',
+  'carmen lucia','andré mendonça','dias toffoli','nunes marques','rosa weber',
+  'marco aurélio','celso de mello','teori zavascki'
+];
+const MINISTROS_STJ = [
+  'nancy andrighi','luis felipe salomão','paulo de tarso sanseverino',
+  'ricardo villas bôas cueva','marco buzzi','marco aurélio bellizze','moura ribeiro',
+  'antonio carlos ferreira','joão otávio de noronha','raul araújo','isabel gallotti',
+  'gurgel de faria','herman benjamin','mauro campbell marques','og fernandes',
+  'benedito gonçalves','sérgio kukina','regina helena costa','assusete magalhães',
+  'humberto martins','sidnei beneti'
+];
+const MINISTROS_TST = [
+  'kátia arruda','kátia magalhães arruda','dora maria da costa','evandro valadão',
+  'augusto césar','amaury rodrigues','maria cristina irigoyen peduzzi','breno medeiros',
+  'delaíde miranda arantes','alexandre luiz ramos','josé roberto freire pimenta',
+  'douglas alencar rodrigues','cláudio mascarenhas brandão','aloysio corrêa da veiga'
+];
+
+// Padrões de leis inválidas / alucinadas
+const LEIS_INVALIDAS = [
+  /art\.\s*187[-‐]?[b-zB-Z]/i,
+  /§\s*[4-9]°\s+do\s+art\.\s*192/i,
+  /art\.\s*192.*constituição/i,
+  /lei\s+n[oº°]?\s*1[5-9]\.\d{3}\/20(2[4-9]|[3-9]\d)/i,
+];
+
+const RE_DATA_INVALIDA = /\b(30|31)\s+de\s+fevereiro|(31\s+de\s+(setembro|abril|junho|novembro))|(202[7-9]|20[3-9]\d)\b/i;
+const RE_SUMULA  = /s[uú]mula\s+n?[oº°]?\s*\d+/i;
+const RE_RESP    = /REsp\s+[\d.]+\/[A-Z]{2}/i;
+const RE_HC      = /HC\s+[\d.]+[/-]/i;
+const RE_ADI     = /ADI\s+[\d.]+/i;
+const RE_RE      = /\bRE\s+[\d.]+[/-]/i;
+const RE_DJE     = /DJe?\s+\d{2}\/\d{2}\/\d{4}/i;
+
+function analisarHeuristica(texto) {
+  const tl = texto.toLowerCase();
+  const signals = [];
+  let score = 0;
+
+  const isTJ  = /tribunal\s+de\s+just[iíi]ça|câmara\s+(c[ií]vel|criminal)|desembargador/i.test(texto);
+  const isTS  = /superior\s+tribunal|STF|STJ|TST|TSE|STM/i.test(texto);
+  const isTRF = /tribunal\s+regional\s+federal|TRF/i.test(texto);
+
+  // 1. Ministro STF em TJ estadual
+  const minSTFnoTJ = MINISTROS_STF.filter(m => tl.includes(m) && isTJ && !isTS);
+  if (minSTFnoTJ.length > 0) {
+    score += 35;
+    signals.push({ nivel:'red', icon:'⚠️', nome:'Ministro do STF em tribunal estadual',
+      desc:`"${minSTFnoTJ[0]}" é Ministro(a) do STF, mas o texto menciona um Tribunal de Justiça estadual. Cruzamento típico de alucinação de IA.`,
+      peso:'+35 pts', cor:'red' });
+  }
+
+  // 2. Ministro STJ em TJ estadual
+  const minSTJnoTJ = MINISTROS_STJ.filter(m => tl.includes(m) && isTJ && !isTS);
+  if (minSTJnoTJ.length > 0) {
+    score += 30;
+    signals.push({ nivel:'red', icon:'⚠️', nome:'Ministro do STJ em tribunal estadual',
+      desc:`"${minSTJnoTJ[0]}" é Ministro(a) do STJ, não de um TJ estadual. Mistura de referências típica de modelos generativos.`,
+      peso:'+30 pts', cor:'red' });
+  }
+
+  // 3. Cármen Lúcia como relatora no STJ (cruzamento famoso)
+  if ((tl.includes('cármen lúcia') || tl.includes('carmen lucia')) &&
+      /STJ|superior\s+tribunal\s+de\s+justi[çc]a/i.test(texto)) {
+    score += 25;
+    signals.push({ nivel:'red', icon:'⚠️', nome:'Min. Cármen Lúcia citada como relatora no STJ',
+      desc:'Cármen Lúcia é Ministra do STF, nunca do STJ. Este é um dos erros mais frequentes das IAs generativas.',
+      peso:'+25 pts', cor:'red' });
+  }
+
+  // 4. Números de processo CNJ
+  const numerosMatch = [...(texto.matchAll(/\d{7}-\d{2}\.(\d{4})\.(\d)\.(\d{2,3})\.\d{4}/g))];
+  if (numerosMatch.length > 0) {
+    let numOk = 0;
+    numerosMatch.forEach(m => {
+      const ano = parseInt(m[1]);
+      if (ano > 2026) {
+        score += 25;
+        signals.push({ nivel:'red', icon:'📅', nome:'Número de processo com ano futuro',
+          desc:`O processo contém o ano ${ano}, que ainda não ocorreu. IAs frequentemente geram anos futuros.`,
+          peso:'+25 pts', cor:'red' });
+      } else if (ano >= 1988) { numOk++; }
+    });
+    if (numOk > 0) {
+      score -= 10;
+      signals.push({ nivel:'green', icon:'✅', nome:'Número de processo CNJ com formato válido',
+        desc:`${numOk} número(s) CNJ com ano plausível detectado(s).`,
+        peso:'-10 pts', cor:'green' });
+    }
+  } else if (/processo|recurso/i.test(texto)) {
+    score += 5;
+    signals.push({ nivel:'yellow', icon:'🔢', nome:'Processo mencionado sem número CNJ padronizado',
+      desc:'Textos reais quase sempre incluem o número CNJ completo.',
+      peso:'+5 pts', cor:'yellow' });
+  }
+
+  // 5. Número com dígitos demais
+  if (/\b\d{8,}-\d{2}/i.test(texto)) {
+    score += 20;
+    signals.push({ nivel:'red', icon:'🔢', nome:'Número de processo com dígitos inválidos',
+      desc:'O padrão CNJ exige exatamente 7 dígitos no início. Número com 8+ dígitos não existe nos tribunais.',
+      peso:'+20 pts', cor:'red' });
+  }
+
+  // 6. Leis inválidas / artigos fantasma
+  for (const re of LEIS_INVALIDAS) {
+    if (re.test(texto)) {
+      score += 30;
+      signals.push({ nivel:'red', icon:'📜', nome:'Referência a dispositivo legal suspeito',
+        desc:'O texto cita um artigo com numeração ou conteúdo atípico — padrão frequente em alucinações de IA.',
+        peso:'+30 pts', cor:'red' });
+      break;
+    }
+  }
+
+  // 7. Datas impossíveis
+  const dataInv = RE_DATA_INVALIDA.exec(texto);
+  if (dataInv) {
+    const match = dataInv[0];
+    const isFuturo = /202[7-9]|20[3-9]\d/.test(match);
+    score += isFuturo ? 20 : 35;
+    signals.push({ nivel:'red', icon:'📅',
+      nome: isFuturo ? 'Data em ano futuro' : 'Data de calendário impossível',
+      desc: isFuturo
+        ? `O texto menciona "${match}", que ainda não ocorreu.`
+        : `"${match}" é uma data que não existe (ex.: 30 de fevereiro). Alucinação clássica de IA.`,
+      peso: isFuturo ? '+20 pts' : '+35 pts', cor:'red' });
+  }
+
+  // 8. Indicadores positivos
+  if (RE_SUMULA.test(texto)) {
+    score -= 12;
+    signals.push({ nivel:'green', icon:'✅', nome:'Súmula numerada referenciada',
+      desc:'Citação de Súmula com número específico — padrão de documentos jurídicos reais.',
+      peso:'-12 pts', cor:'green' });
+  }
+  if (RE_RESP.test(texto)) {
+    score -= 8;
+    signals.push({ nivel:'green', icon:'✅', nome:'Formato REsp correto (número/UF)',
+      desc:'Formato de Recurso Especial no padrão oficial do STJ.',
+      peso:'-8 pts', cor:'green' });
+  }
+  if (RE_HC.test(texto) || RE_ADI.test(texto) || RE_RE.test(texto)) {
+    score -= 6;
+    signals.push({ nivel:'green', icon:'✅', nome:'Classe processual com numeração correta',
+      desc:'HC, ADI ou RE com formato consistente com os Tribunais Superiores.',
+      peso:'-6 pts', cor:'green' });
+  }
+  if (RE_DJE.test(texto)) {
+    score -= 8;
+    signals.push({ nivel:'green', icon:'✅', nome:'Referência ao DJe com data',
+      desc:'Publicação no Diário da Justiça eletrônico com data — padrão de documentos reais.',
+      peso:'-8 pts', cor:'green' });
+  }
+  const tecTermos = ['in re ipsa','in dubio pro reo','fumus boni iuris','periculum in mora',
+    'ex officio','ad quem','a quo','habeas corpus'].filter(t2 => tl.includes(t2));
+  if (tecTermos.length >= 2) {
+    score -= 5;
+    signals.push({ nivel:'green', icon:'✅', nome:'Terminologia jurídica técnica',
+      desc:`Termos como "${tecTermos.slice(0,2).join('", "')}" são consistentes com redação jurídica real.`,
+      peso:'-5 pts', cor:'green' });
+  }
+
+  // Aviso texto curto
+  if (texto.trim().length < 80) {
+    signals.push({ nivel:'yellow', icon:'ℹ️', nome:'Texto curto — análise limitada',
+      desc:'Cole um trecho maior para uma análise mais precisa.',
+      peso:'neutro', cor:'yellow' });
+  }
+
+  // Clamping
+  score = Math.max(0, Math.min(100, score));
+
+  let nivel, verdictText, summaryText;
+  if (score <= 25) {
+    nivel = 'real'; verdictText = '✅ Provável Real';
+    summaryText = `Nenhum sinal grave de alucinação detectado. O texto apresenta características compatíveis com documentos jurídicos reais. Sempre confirme nas fontes oficiais antes de usar em petições.`;
+  } else if (score <= 60) {
+    nivel = 'suspeito'; verdictText = '⚠️ Suspeito — Verificar';
+    summaryText = `Sinais que requerem atenção foram detectados. Este texto pode conter elementos gerados por IA. Verifique cada referência individualmente em fontes oficiais antes de qualquer uso profissional.`;
+  } else {
+    nivel = 'fake'; verdictText = '🚨 Alta Probabilidade de Alucinação';
+    summaryText = `O texto apresenta múltiplos sinais de alucinação: cruzamento de ministros com tribunais errados, leis inexistentes, datas impossíveis ou números de processo inválidos. NÃO utilize em petições sem verificação rigorosa.`;
+  }
+
+  return { score, nivel, verdictText, summaryText, signals };
+}
+
+function preencherExemplo(key) {
+  const ta = document.getElementById('analiseTexto');
+  ta.value = ANALISE_EXEMPLOS[key] || '';
+  document.getElementById('analiseCharCount').textContent = ta.value.length + ' caracteres';
+}
+
+function limparAnalise() {
+  document.getElementById('analiseTexto').value = '';
+  document.getElementById('analiseCharCount').textContent = '0 caracteres';
+  document.getElementById('diagPlaceholder').style.display = '';
+  document.getElementById('diagResult').classList.remove('show');
+}
+
+function analisarTexto() {
+  const texto = document.getElementById('analiseTexto').value.trim();
+  if (!texto) { alert('Cole um texto antes de analisar.'); return; }
+
+  const r = analisarHeuristica(texto);
+
+  document.getElementById('diagPlaceholder').style.display = 'none';
+  document.getElementById('diagResult').classList.add('show');
+
+  // Medidor
+  const verdictEl = document.getElementById('diagVerdict');
+  verdictEl.textContent = r.verdictText;
+  verdictEl.className = 'diag-verdict ' + r.nivel;
+
+  const pctEl = document.getElementById('diagPct');
+  pctEl.textContent = r.score + '%';
+  pctEl.className = 'diag-pct ' + r.nivel;
+
+  document.getElementById('diagSubtitle').textContent = `Índice de suspeita heurística: ${r.score}/100`;
+
+  const fill = document.getElementById('diagBarFill');
+  fill.className = 'diag-bar-fill ' + r.nivel;
+  fill.style.width = '0%';
+  setTimeout(() => { fill.style.width = r.score + '%'; }, 60);
+
+  // Sinais
+  const signalsEl = document.getElementById('diagSignals');
+  signalsEl.innerHTML = r.signals.length === 0
+    ? '<div style="font-size:13px;color:var(--text-muted);padding:12px 0;">Nenhum sinal específico identificado.</div>'
+    : r.signals.map(s => {
+        const bg = s.cor === 'red' ? 'sig-red' : (s.cor === 'yellow' ? 'sig-yellow' : 'sig-green');
+        return `<div class="diag-signal">
+          <div class="diag-signal-icon ${bg}">${s.icon}</div>
+          <div class="diag-signal-body">
+            <div class="diag-signal-name">${s.nome}</div>
+            <div class="diag-signal-desc">${s.desc}</div>
+            <div class="diag-signal-weight ${s.cor}">${s.peso}</div>
+          </div></div>`;
+      }).join('');
+
+  // Resumo
+  const box = document.getElementById('diagSummaryBox');
+  box.textContent = r.summaryText;
+  box.className = 'diag-summary-box ' + r.nivel;
+}
+
+// Contador de caracteres
+(function() {
+  function setupCounter() {
+    const ta = document.getElementById('analiseTexto');
+    if (ta) ta.addEventListener('input', () => {
+      document.getElementById('analiseCharCount').textContent = ta.value.length + ' caracteres';
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupCounter);
+  else setupCounter();
+})();
 
 // ========= QR CODE =========
 window.addEventListener('load', function() {
