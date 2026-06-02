@@ -3,9 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IA na Advocacia — EXPOETEP 2026</title>
+<meta name="theme-color" content="#0D1B3E">
+<meta name="description" content="LexAI — Inteligência Artificial na Advocacia. Plataforma interativa EXPOETEP 2026.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LexAI">
+<link rel="manifest" id="pwaManifest">
+<link rel="apple-touch-icon" id="appleTouchIcon">
+<title>LexAI — IA na Advocacia · EXPOETEP 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root {
     --navy: #0D1B3E;
@@ -1109,41 +1115,6 @@
     gap: 24px;
   }
 
-  .qr-card {
-    background: var(--navy-light);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px;
-    text-align: center;
-  }
-
-  .qr-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-
-  #qrcode {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 16px;
-  }
-
-  #qrcode canvas, #qrcode img {
-    border-radius: 8px;
-    padding: 8px;
-    background: white;
-  }
-
-  .qr-text {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-
   .timeline-card {
     background: var(--navy-light);
     border: 1px solid var(--border);
@@ -1511,6 +1482,273 @@
   .diag-summary-box.real    { background: rgba(74,222,128,0.07);  border-color: rgba(74,222,128,0.2);  color: #86EFAC; }
   .diag-summary-box.suspeito { background: rgba(201,162,39,0.07);  border-color: rgba(201,162,39,0.2);  color: var(--gold-light); }
   .diag-summary-box.fake    { background: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.2); color: #FCA5A5; }
+
+  /* ===== PESQUISA IA — BUSCA POR CLAUDE ===== */
+  .pesquisa-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .pesquisa-input-panel {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    position: sticky;
+    top: 80px;
+  }
+
+  .pesquisa-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .pesquisa-input {
+    width: 100%;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 12px;
+  }
+
+  .pesquisa-input::placeholder { color: var(--text-muted); }
+  .pesquisa-input:focus { border-color: var(--gold); }
+
+  .pesquisa-select {
+    width: 100%;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 12px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A227' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .pesquisa-select option { background: #0D1B3E; color: var(--white); }
+
+  .pesquisa-btn {
+    width: 100%;
+    background: var(--gold);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .pesquisa-btn:hover:not(:disabled) { background: var(--gold-light); transform: translateY(-1px); }
+  .pesquisa-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .pesquisa-sugestoes-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .pesquisa-sug-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: #9AAFC8;
+    font-size: 12px;
+    cursor: pointer;
+    margin-bottom: 6px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+
+  .pesquisa-sug-btn:hover {
+    background: rgba(201,162,39,0.08);
+    border-color: var(--border);
+    color: var(--gold-light);
+  }
+
+  /* Resultados */
+  .pesquisa-resultado-panel {
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    min-height: 500px;
+  }
+
+  .pesquisa-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 14px;
+    opacity: 0.4;
+    text-align: center;
+  }
+
+  .pesquisa-loading {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 20px;
+  }
+
+  .pesquisa-loading.show { display: flex; }
+
+  .pesquisa-spinner {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(201,162,39,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .pesquisa-loading-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .pesquisa-resultado {
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pesquisa-resultado.show { display: flex; }
+
+  .pesquisa-result-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pesquisa-result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .pesquisa-result-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .pesquisa-juris-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 20px 22px;
+    transition: border-color 0.2s;
+  }
+
+  .pesquisa-juris-card:hover { border-color: var(--border); }
+
+  .pesquisa-juris-tribunal {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .pesquisa-juris-ementa {
+    font-size: 13px;
+    color: #CBD5E1;
+    line-height: 1.75;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  .pesquisa-juris-ref {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .pesquisa-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, rgba(201,162,39,0.15), rgba(201,162,39,0.08));
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold-light);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .pesquisa-copy-btn:hover {
+    background: rgba(201,162,39,0.25);
+    transform: translateY(-1px);
+  }
+
+  .pesquisa-copy-btn.copiado {
+    background: rgba(74,222,128,0.15);
+    border-color: #4ADE80;
+    color: #4ADE80;
+  }
+
+  .pesquisa-aviso {
+    background: rgba(201,162,39,0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
 
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 6px; }
@@ -2103,10 +2341,174 @@
     line-height: 1.4;
   }
 
-  .dj-map-chip strong { color: var(--gold-light); display: block; font-size: 10px; }
+  /* ===== PWA — BOTÃO DE INSTALAÇÃO ===== */
+  .pwa-install-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: none; /* mostrado via JS quando disponível */
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy);
+    border: none;
+    border-radius: 100px;
+    padding: 14px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 24px rgba(201,162,39,0.45), 0 2px 8px rgba(0,0,0,0.3);
+    transition: all 0.25s;
+    animation: fabPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes fabPulse {
+    0%,100% { box-shadow: 0 4px 24px rgba(201,162,39,0.45), 0 2px 8px rgba(0,0,0,0.3); }
+    50%      { box-shadow: 0 4px 36px rgba(201,162,39,0.7),  0 2px 8px rgba(0,0,0,0.3); }
+  }
+
+  .pwa-install-fab:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 32px rgba(201,162,39,0.6), 0 2px 8px rgba(0,0,0,0.3);
+    animation: none;
+  }
+
+  .pwa-install-fab.show { display: flex; }
+
+  .pwa-install-fab .fab-icon { font-size: 18px; }
+
+  /* Banner de instrução iOS (não tem evento BeforeInstallPrompt) */
+  .pwa-ios-banner {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: none;
+    background: var(--navy-light);
+    border: 1px solid var(--gold);
+    border-radius: 16px;
+    padding: 16px 20px;
+    max-width: 340px;
+    width: calc(100% - 48px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    animation: slideUp 0.4s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+    to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+  }
+
+  .pwa-ios-banner.show { display: block; }
+
+  .pwa-ios-banner-close {
+    position: absolute;
+    top: 10px; right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .pwa-ios-banner-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .pwa-ios-banner-text {
+    font-size: 12px;
+    color: #9AAFC8;
+    line-height: 1.6;
+  }
+
+  .pwa-ios-banner-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #CBD5E1;
+  }
+
+  .pwa-ios-step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pwa-ios-step-num {
+    width: 20px; height: 20px;
+    background: rgba(201,162,39,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* Toast de confirmação */
+  .pwa-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    z-index: 99999;
+    background: rgba(74,222,128,0.15);
+    border: 1px solid rgba(74,222,128,0.4);
+    border-radius: 100px;
+    padding: 12px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #86EFAC;
+    backdrop-filter: blur(12px);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+  }
+
+  .pwa-toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
+
+<!-- PWA: Botão flutuante de instalação (Android/Chrome/Edge) -->
+<button class="pwa-install-fab" id="pwaInstallFab" onclick="pwaInstall()" aria-label="Instalar aplicativo">
+  <span class="fab-icon">📲</span>
+  <span>Instalar App</span>
+</button>
+
+<!-- PWA: Banner de instrução para iOS (Safari não tem BeforeInstallPrompt) -->
+<div class="pwa-ios-banner" id="pwaIosBanner">
+  <button class="pwa-ios-banner-close" onclick="document.getElementById('pwaIosBanner').classList.remove('show');localStorage.setItem('pwaIosDismissed','1')">×</button>
+  <div class="pwa-ios-banner-title">📲 Instalar LexAI no iPhone</div>
+  <div class="pwa-ios-banner-text">Adicione à tela inicial para usar como app:</div>
+  <div class="pwa-ios-banner-steps">
+    <div class="pwa-ios-step">
+      <div class="pwa-ios-step-num">1</div>
+      <span>Toque em <strong style="color:var(--gold)">Compartilhar</strong> (ícone ↑ na barra do Safari)</span>
+    </div>
+    <div class="pwa-ios-step">
+      <div class="pwa-ios-step-num">2</div>
+      <span>Role e toque em <strong style="color:var(--gold)">"Adicionar à Tela de Início"</strong></span>
+    </div>
+    <div class="pwa-ios-step">
+      <div class="pwa-ios-step-num">3</div>
+      <span>Toque em <strong style="color:var(--gold)">Adicionar</strong> — pronto! ✅</span>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de confirmação -->
+<div class="pwa-toast" id="pwaToast">✅ App instalado com sucesso!</div>
 
 <!-- HERO -->
 <div class="hero" id="heroSection">
@@ -2121,6 +2523,7 @@
       <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('futuro')">FUTURO</button>
       <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('ferramentas')">FERRAMENTAS</button>
       <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('analise')">ANÁLISE</button>
+      <button class="hero-nav-link" onclick="scrollToNav(); showSectionByName('pesquisa')">🤖 PESQUISA IA</button>
     </div>
   </div>
 
@@ -2160,6 +2563,7 @@
     <div class="hero-btns">
       <button class="hero-btn-primary" onclick="scrollToNav(); showSectionByName('apresentacao')">Ver Apresentação</button>
       <button class="hero-btn-outline" onclick="scrollToNav(); showSectionByName('chat')">Falar com LexIA</button>
+      <button class="hero-btn-outline" id="heroInstallBtn" onclick="pwaInstall()" style="display:none;border-color:var(--gold);background:rgba(201,162,39,0.1);">📲 Instalar App</button>
     </div>
   </div>
 </div>
@@ -2175,6 +2579,7 @@
     <button class="nav-btn" onclick="showSection('futuro', this)">🚀 Futuro da Advocacia</button>
     <button class="nav-btn" onclick="showSection('ferramentas', this)">🛠️ Ferramentas</button>
     <button class="nav-btn" onclick="showSection('analise', this)">🔬 Análise de Texto</button>
+    <button class="nav-btn" onclick="showSection('pesquisa', this)">🤖 Pesquisa IA</button>
   </div>
 </nav>
 
@@ -2424,23 +2829,8 @@
       </div>
 
       <!-- API KEY CONFIG -->
-      <div class="dj-config-bar">
-        <div class="dj-field-group">
-          <div class="dj-label">🔑 DataJud API Key (obrigatória)</div>
-          <input type="password" id="djApiKey" class="dj-input dj-input-key"
-            placeholder="Cole aqui sua APIKey do DataJud/CNJ..."
-            title="Obtenha sua chave em: datajud.cnj.jus.br">
-        </div>
-        <div class="dj-field-group">
-          <div class="dj-label" style="color:var(--text-muted);">Como obter</div>
-          <a href="https://datajud-wiki.cnj.jus.br/api-publica/acesso" target="_blank"
-             style="font-size:12px;color:var(--gold-light);text-decoration:none;padding:11px 14px;background:rgba(201,162,39,0.08);border:1px solid var(--border);border-radius:10px;display:block;text-align:center;transition:all 0.2s;"
-             onmouseover="this.style.background='rgba(201,162,39,0.15)'"
-             onmouseout="this.style.background='rgba(201,162,39,0.08)'">
-            📖 Acessar Wiki DataJud →
-          </a>
-        </div>
-      </div>
+      <!-- API Key pré-configurada (oculta) -->
+      <input type="hidden" id="djApiKey" value="cDZHYzlZa0JadVREZDJCendQbXY6SkJlTzNjLV9TRENyQk1RdnFKZGRQdw==">
 
       <!-- SEARCH ROW -->
       <div class="dj-search-row">
@@ -2740,11 +3130,6 @@
         </div>
       </div>
 
-      <div class="qr-card">
-        <div class="qr-label">📱 Escaneie no celular</div>
-        <div id="qrcode"></div>
-        <div class="qr-text">Escaneie e teste a experiência no seu celular</div>
-      </div>
       </div><!-- end timeline+qr grid -->
 
     </div><!-- end futuro-qr-section -->
@@ -2979,6 +3364,102 @@ Cole aqui qualquer ementa, acórdão ou decisão para análise."></textarea>
     </div>
   </section>
 
+  <!-- ════════════════════════════════════════════════
+       SEÇÃO 07: PESQUISA IA — BUSCA DE JURISPRUDÊNCIA
+       ════════════════════════════════════════════════ -->
+  <section id="pesquisa" class="section">
+    <div class="section-header">
+      <div class="section-tag">Seção 07</div>
+      <h2 class="section-title">Pesquisa de Jurisprudência por IA</h2>
+      <p class="section-desc">Descreva o tema jurídico e a IA gera ementas e acórdãos do STF, STJ ou TST. Copie o resultado direto para a aba de Análise de Texto.</p>
+      <div class="gold-line"></div>
+    </div>
+
+    <div class="pesquisa-layout">
+
+      <!-- ── PAINEL ESQUERDO: CONTROLES ── -->
+      <div class="pesquisa-input-panel">
+
+        <label class="pesquisa-label">🔍 Tema ou palavra-chave jurídica</label>
+        <input type="text" id="pesquisaInput" class="pesquisa-input"
+          placeholder="Ex: dano moral plano de saúde..."
+          maxlength="200"
+          onkeydown="if(event.key==='Enter') pesquisarJurisprudencia()">
+
+        <label class="pesquisa-label">🏛 Tribunal</label>
+        <select id="pesquisaTribunal" class="pesquisa-select">
+          <option value="qualquer">Qualquer (STF, STJ ou TST)</option>
+          <option value="STF">STF — Supremo Tribunal Federal</option>
+          <option value="STJ">STJ — Superior Tribunal de Justiça</option>
+          <option value="TST">TST — Tribunal Superior do Trabalho</option>
+          <option value="TJSP">TJSP — Tribunal de Justiça de SP</option>
+        </select>
+
+        <label class="pesquisa-label">📋 Tipo de resultado</label>
+        <select id="pesquisaTipo" class="pesquisa-select">
+          <option value="ementa">Ementa jurídica (para análise de alucinação)</option>
+          <option value="real">Acórdão completo (formato real)</option>
+          <option value="misto">Misto: 1 real + 1 alucinado (para treino)</option>
+        </select>
+
+        <button class="pesquisa-btn" id="pesquisaBtn" onclick="pesquisarJurisprudencia()">
+          <span id="pesquisaBtnIcon">✨</span>
+          <span id="pesquisaBtnText">Pesquisar com IA</span>
+        </button>
+
+        <!-- Sugestões rápidas -->
+        <div class="pesquisa-sugestoes-title">⚡ Sugestões rápidas</div>
+        <button class="pesquisa-sug-btn" onclick="pesquisaSugestao('dano moral negativação indevida', 'STJ', 'ementa')">📌 Dano moral — negativação indevida (STJ)</button>
+        <button class="pesquisa-sug-btn" onclick="pesquisaSugestao('plano de saúde negativa de cobertura', 'STJ', 'ementa')">📌 Plano de saúde — negativa de cobertura (STJ)</button>
+        <button class="pesquisa-sug-btn" onclick="pesquisaSugestao('horas extras banco de horas', 'TST', 'ementa')">📌 Horas extras — banco de horas (TST)</button>
+        <button class="pesquisa-sug-btn" onclick="pesquisaSugestao('LGPD proteção de dados pessoais', 'STJ', 'ementa')">📌 LGPD — proteção de dados (STJ)</button>
+        <button class="pesquisa-sug-btn" onclick="pesquisaSugestao('progressão de regime crime hediondo', 'STF', 'ementa')">📌 Progressão de regime — hediondo (STF)</button>
+        <button class="pesquisa-sug-btn" onclick="pesquisaSugestao('inteligência artificial advocacia responsabilidade', 'STJ', 'misto')">🤖 IA na advocacia — real vs alucinado (STJ)</button>
+      </div>
+
+      <!-- ── PAINEL DIREITO: RESULTADO ── -->
+      <div class="pesquisa-resultado-panel">
+
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;">
+          📄 Resultado da Pesquisa
+        </div>
+
+        <!-- Estado vazio -->
+        <div class="pesquisa-empty" id="pesquisaEmpty">
+          <div style="font-size:48px;">⚖</div>
+          <div style="font-size:14px;color:var(--text-muted);">Digite um tema à esquerda<br>e clique em "Pesquisar com IA"</div>
+        </div>
+
+        <!-- Loading -->
+        <div class="pesquisa-loading" id="pesquisaLoading">
+          <div class="pesquisa-spinner"></div>
+          <div class="pesquisa-loading-text">
+            Consultando a IA jurídica...<br>
+            <span style="font-size:12px;opacity:0.6;">Gerando jurisprudência sobre o tema</span>
+          </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="pesquisa-resultado" id="pesquisaResultado">
+
+          <div class="pesquisa-result-header">
+            <div class="pesquisa-result-title" id="pesquisaResultTitle">—</div>
+            <div class="pesquisa-result-meta" id="pesquisaResultMeta">—</div>
+          </div>
+
+          <div id="pesquisaCards"></div>
+
+          <div class="pesquisa-aviso">
+            ⚠️ <strong style="color:var(--gold-light);">Atenção:</strong> Os resultados são gerados por IA e podem conter
+            imprecisões. Clique em <strong>"Enviar para Análise"</strong> para verificar automaticamente
+            se o texto tem sinais de alucinação, e sempre confirme em fontes oficiais antes de usar em petições.
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer id="siteFooter">
@@ -2987,6 +3468,30 @@ Cole aqui qualquer ementa, acórdão ou decisão para análise."></textarea>
     Inteligência Artificial na Advocacia<br>
     Centro Universitário ETEP — São José dos Campos · 2026
   </div>
+
+  <!-- Bloco de instalação PWA no rodapé -->
+  <div style="margin:24px auto 0;max-width:480px;background:rgba(201,162,39,0.07);border:1px solid var(--border);border-radius:14px;padding:20px 24px;text-align:center;">
+    <div style="font-size:28px;margin-bottom:8px;">📲</div>
+    <div style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:6px;">Leve a LexAI no seu celular</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">
+      Instale como app — funciona offline, sem precisar abrir o navegador.
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button id="footerInstallBtn" onclick="pwaInstall()"
+        style="display:none;background:var(--gold);border:none;border-radius:10px;padding:11px 22px;color:var(--navy);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;"
+        onmouseover="this.style.background='var(--gold-light)'"
+        onmouseout="this.style.background='var(--gold)'">
+        📲 Instalar Agora (Android / PC)
+      </button>
+      <button onclick="pwaShowIosInstructions()"
+        style="background:transparent;border:1px solid var(--border);border-radius:10px;padding:11px 22px;color:#9AAFC8;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;"
+        onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold-light)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.color='#9AAFC8'">
+        🍎 Instruções para iPhone
+      </button>
+    </div>
+  </div>
+
   <div class="footer-logo-row">
     <div class="footer-badge">EXPOETEP 2026</div>
     <div class="footer-badge">Curso de Direito</div>
@@ -4591,19 +5096,435 @@ function analisarTexto() {
 
 // ========= QR CODE =========
 window.addEventListener('load', function() {
-  try {
-    new QRCode(document.getElementById('qrcode'), {
-      text: window.location.href || 'https://expoetep.etep.edu.br/ia-advocacia-2026',
-      width: 160,
-      height: 160,
-      colorDark: '#0D1B3E',
-      colorLight: '#FFFFFF',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  } catch(e) {}
   renderQuiz();
   startDetector();
 });
+// =========================================================
+// PESQUISA IA — BUSCA DE JURISPRUDÊNCIA VIA API CLAUDE
+// =========================================================
+
+/**
+ * Preenche o campo de busca e dispara a pesquisa ao clicar numa sugestão
+ */
+function pesquisaSugestao(tema, tribunal, tipo) {
+  document.getElementById('pesquisaInput').value = tema;
+  document.getElementById('pesquisaTribunal').value = tribunal;
+  document.getElementById('pesquisaTipo').value = tipo;
+  pesquisarJurisprudencia();
+}
+
+/**
+ * Copia o texto de uma ementa para a textarea da aba de Análise
+ * e navega automaticamente para essa aba
+ */
+function enviarParaAnalise(texto, btnEl) {
+  // Envia para a textarea da seção de análise
+  const textarea = document.getElementById('analiseTexto');
+  if (textarea) {
+    textarea.value = texto;
+    const ev = new Event('input');
+    textarea.dispatchEvent(ev);
+  }
+
+  // Feedback visual no botão
+  btnEl.classList.add('copiado');
+  btnEl.innerHTML = '✅ Enviado para Análise!';
+
+  // Navega para a aba de análise após 600ms
+  setTimeout(() => {
+    const analiseBtn = document.querySelector('.nav-btn[onclick*="analise"]');
+    if (analiseBtn) showSection('analise', analiseBtn);
+    btnEl.classList.remove('copiado');
+    btnEl.innerHTML = '📋 Enviar para Análise';
+  }, 700);
+}
+
+/**
+ * Constrói o prompt para o Claude de acordo com o tipo solicitado
+ */
+function buildPrompt(tema, tribunal, tipo) {
+  const tribDesc = tribunal === 'qualquer'
+    ? 'STF, STJ ou TST (escolha o mais relevante para o tema)'
+    : tribunal;
+
+  const instrucaoTipo = {
+    ementa: `Gere 2 ementas jurídicas REAIS e bem fundamentadas sobre o tema, no formato oficial brasileiro.
+Cada ementa deve ter:
+- Tribunal (${tribDesc})
+- Número de processo fictício mas plausível no padrão CNJ (NNNNNNN-DD.AAAA.J.TR.OOOO)
+- Relator fictício mas com nome jurídico plausível
+- Ementa completa em maiúsculas com tese principal
+- Referência (Turma, data de julgamento, DJe)`,
+
+    real: `Gere 1 acórdão completo e realista sobre o tema, no formato oficial brasileiro, com:
+- Cabeçalho (Tribunal ${tribDesc}, número CNJ plausível, relator, turma)
+- Ementa completa
+- Relatório resumido (3-4 linhas)
+- Fundamentos da decisão (5-6 linhas)
+- Dispositivo`,
+
+    misto: `Gere 2 ementas sobre o tema:
+EMENTA 1 (REAL): Uma ementa juridicamente correta, bem fundamentada, com referências plausíveis do ${tribDesc}.
+EMENTA 2 (COM ALUCINAÇÕES): Uma ementa que pareça real mas contenha ao menos 2 erros típicos de IA: misture um ministro do STF em acórdão estadual, invente um artigo de lei inexistente (ex: art. 187-B do CC), ou use uma data impossível (ex: 30 de fevereiro). NÃO avise qual é a falsa — deixe o usuário descobrir.
+Separe claramente com os títulos "EMENTA 1" e "EMENTA 2".`
+  };
+
+  return `Você é um especialista em Direito brasileiro. ${instrucaoTipo[tipo]}
+
+TEMA: "${tema}"
+
+REGRAS IMPORTANTES:
+- Use terminologia jurídica brasileira precisa e formal
+- Números de processo devem seguir o padrão CNJ: NNNNNNN-DD.AAAA.J.TR.OOOO
+- Nomes de relatores devem ser fictícios mas plausíveis
+- Datas devem ser reais e passadas (entre 2018 e 2025)
+- Formate bem com quebras de linha
+- Não adicione disclaimers ou avisos ao final — apenas o conteúdo jurídico solicitado`;
+}
+
+/**
+ * Renderiza os cards de resultado parseando o texto retornado pela IA
+ */
+function renderizarResultados(texto, tema, tribunal, tipo) {
+  const cards = document.getElementById('pesquisaCards');
+
+  if (tipo === 'misto') {
+    // Separa em 2 blocos pelo título EMENTA 1 / EMENTA 2
+    const partes = texto.split(/EMENTA\s*2/i);
+    const ementa1 = partes[0].replace(/EMENTA\s*1/i, '').trim();
+    const ementa2 = partes[1] ? partes[1].trim() : '';
+
+    cards.innerHTML = `
+      ${renderCard(ementa1, tribunal, '🟢 Ementa 1 — Identifique se é real ou falsa', 'rgba(74,222,128,0.08)', 'rgba(74,222,128,0.2)')}
+      ${ementa2 ? renderCard(ementa2, tribunal, '🔴 Ementa 2 — Identifique se é real ou falsa', 'rgba(248,113,113,0.06)', 'rgba(248,113,113,0.2)') : ''}
+    `;
+  } else {
+    // Tenta separar em múltiplos blocos por separadores comuns
+    const blocos = texto.split(/\n{2,}(?=[A-ZÁÉÍÓÚ]{4,}|\d{7})/).filter(b => b.trim().length > 40);
+    if (blocos.length >= 2) {
+      cards.innerHTML = blocos.map((bloco, i) =>
+        renderCard(bloco, tribunal, `Jurisprudência ${i + 1}`, '', '')
+      ).join('');
+    } else {
+      cards.innerHTML = renderCard(texto, tribunal, 'Resultado', '', '');
+    }
+  }
+}
+
+function renderCard(texto, tribunal, titulo, bgExtra, borderExtra) {
+  const textoLimpo = texto.trim();
+  // Tenta extrair referência (última linha com número/data)
+  const linhas = textoLimpo.split('\n').filter(l => l.trim());
+  const refPattern = /\d{4}|Turma|Plenário|DJe|julgado/i;
+  const refIdx = linhas.map((l, i) => ({ l, i })).filter(({ l }) => refPattern.test(l)).pop();
+  const ref = refIdx ? linhas[refIdx.i] : '';
+
+  const id = 'pesqCard_' + Math.random().toString(36).slice(2, 8);
+
+  return `
+    <div class="pesquisa-juris-card" style="${bgExtra ? `background:${bgExtra};border-color:${borderExtra};` : ''}">
+      <div class="pesquisa-juris-tribunal">${tribunal === 'qualquer' ? '⚖ Resultado' : '🏛 ' + tribunal} — ${titulo}</div>
+      <div class="pesquisa-juris-ementa" id="${id}">${textoLimpo.replace(/\n/g, '<br>')}</div>
+      ${ref ? `<div class="pesquisa-juris-ref">📋 ${ref}</div>` : ''}
+      <button class="pesquisa-copy-btn" onclick="enviarParaAnalise(document.getElementById('${id}').innerText, this)">
+        📋 Enviar para Análise
+      </button>
+    </div>`;
+}
+
+/**
+ * Função principal: chama a API do Claude e renderiza o resultado
+ */
+async function pesquisarJurisprudencia() {
+  const tema     = document.getElementById('pesquisaInput').value.trim();
+  const tribunal = document.getElementById('pesquisaTribunal').value;
+  const tipo     = document.getElementById('pesquisaTipo').value;
+
+  if (!tema) {
+    document.getElementById('pesquisaInput').focus();
+    document.getElementById('pesquisaInput').style.borderColor = '#F87171';
+    setTimeout(() => { document.getElementById('pesquisaInput').style.borderColor = ''; }, 2000);
+    return;
+  }
+
+  // UI: loading
+  document.getElementById('pesquisaEmpty').style.display    = 'none';
+  document.getElementById('pesquisaLoading').classList.add('show');
+  document.getElementById('pesquisaResultado').classList.remove('show');
+
+  const btn  = document.getElementById('pesquisaBtn');
+  const icon = document.getElementById('pesquisaBtnIcon');
+  const txt  = document.getElementById('pesquisaBtnText');
+  btn.disabled = true;
+  icon.textContent = '⏳';
+  txt.textContent  = 'Pesquisando...';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: buildPrompt(tema, tribunal, tipo)
+        }]
+      })
+    });
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data    = await response.json();
+    const textContent = data.content?.find(c => c.type === 'text')?.text || '';
+
+    if (!textContent) throw new Error('Resposta vazia da IA');
+
+    // Renderiza
+    document.getElementById('pesquisaResultTitle').textContent =
+      `"${tema.length > 50 ? tema.slice(0,50)+'…' : tema}"`;
+    document.getElementById('pesquisaResultMeta').textContent =
+      `${tribunal === 'qualquer' ? 'STF / STJ / TST' : tribunal} · ${
+        tipo === 'ementa' ? '2 ementas' : tipo === 'real' ? '1 acórdão' : '2 ementas (real + alucinada)'
+      } · gerado por Claude IA`;
+
+    renderizarResultados(textContent, tribunal, tipo);
+
+    document.getElementById('pesquisaLoading').classList.remove('show');
+    document.getElementById('pesquisaResultado').classList.add('show');
+
+  } catch (err) {
+    document.getElementById('pesquisaLoading').classList.remove('show');
+    document.getElementById('pesquisaEmpty').style.display = '';
+
+    // Mostra erro elegante dentro do painel
+    document.getElementById('pesquisaEmpty').innerHTML = `
+      <div style="font-size:40px;">⚠️</div>
+      <div style="font-size:14px;color:#F87171;font-weight:600;">Erro na conexão com a IA</div>
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.6;max-width:280px;">
+        ${err.message.includes('HTTP') ? 'Verifique sua conexão e tente novamente.' : err.message}
+      </div>
+      <button onclick="pesquisarJurisprudencia()" style="margin-top:8px;background:var(--gold);border:none;border-radius:8px;padding:10px 20px;color:var(--navy);font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">
+        ↺ Tentar novamente
+      </button>`;
+  } finally {
+    btn.disabled     = false;
+    icon.textContent = '✨';
+    txt.textContent  = 'Pesquisar com IA';
+  }
+}
+
+// =========================================================
+// PWA — PROGRESSIVE WEB APP ENGINE
+// Manifest inline, Service Worker embutido, Install prompt
+// =========================================================
+
+(function initPWA() {
+
+  // ── 1. ÍCONE SVG → gerado via canvas em base64 ──────────
+  function gerarIconeBase64(size) {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext('2d');
+
+    // Fundo navy
+    ctx.fillStyle = '#0D1B3E';
+    const r = size * 0.18;
+    ctx.beginPath();
+    ctx.moveTo(r, 0);
+    ctx.lineTo(size - r, 0);
+    ctx.quadraticCurveTo(size, 0, size, r);
+    ctx.lineTo(size, size - r);
+    ctx.quadraticCurveTo(size, size, size - r, size);
+    ctx.lineTo(r, size);
+    ctx.quadraticCurveTo(0, size, 0, size - r);
+    ctx.lineTo(0, r);
+    ctx.quadraticCurveTo(0, 0, r, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Círculo dourado externo
+    ctx.strokeStyle = '#C9A227';
+    ctx.lineWidth = size * 0.04;
+    ctx.beginPath();
+    ctx.arc(size / 2, size / 2, size * 0.36, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Balança (⚖) — desenhada como texto
+    ctx.fillStyle = '#C9A227';
+    ctx.font = `bold ${size * 0.42}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('⚖', size / 2, size / 2 + size * 0.02);
+
+    // "AI" pequeno abaixo
+    ctx.fillStyle = '#E8C060';
+    ctx.font = `bold ${size * 0.15}px 'DM Sans', sans-serif`;
+    ctx.fillText('AI', size / 2, size * 0.78);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  const icon192 = gerarIconeBase64(192);
+  const icon512 = gerarIconeBase64(512);
+
+  // Define o apple-touch-icon dinamicamente
+  document.getElementById('appleTouchIcon').href = icon192;
+
+  // ── 2. MANIFEST JSON inline como Blob ────────────────────
+  const manifest = {
+    name: 'LexAI — IA na Advocacia',
+    short_name: 'LexAI',
+    description: 'Plataforma interativa sobre Inteligência Artificial na Advocacia · EXPOETEP 2026',
+    start_url: './',
+    scope: './',
+    display: 'standalone',
+    orientation: 'any',
+    theme_color: '#0D1B3E',
+    background_color: '#0D1B3E',
+    lang: 'pt-BR',
+    categories: ['education', 'productivity'],
+    icons: [
+      { src: icon192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+      { src: icon512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+    ],
+    shortcuts: [
+      { name: 'Chat IA Jurídica',       short_name: 'Chat',      url: './#chat',       description: 'Converse com a LexIA' },
+      { name: 'Detector de Fake',       short_name: 'Detector',  url: './#detector',   description: 'Quiz de jurisprudência' },
+      { name: 'Pesquisa de Jurisprudência', short_name: 'Pesquisa', url: './#pesquisa', description: 'Busca com IA' }
+    ]
+  };
+
+  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+  const manifestUrl  = URL.createObjectURL(manifestBlob);
+  document.getElementById('pwaManifest').href = manifestUrl;
+
+  // ── 3. SERVICE WORKER embutido como Blob ─────────────────
+  const swCode = `
+const CACHE_NAME = 'lexai-v1';
+const ASSETS = ['./', './index.html'];
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(ASSETS).catch(() => {});
+    })
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
+  if (e.request.url.includes('api.anthropic.com')) return; // não cacheia chamadas de API
+  if (e.request.url.includes('datajud.cnj.jus.br')) return;
+
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      if (cached) return cached;
+      return fetch(e.request).then(resp => {
+        if (!resp || resp.status !== 200 || resp.type === 'opaque') return resp;
+        const clone = resp.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        return resp;
+      }).catch(() => caches.match('./'));
+    })
+  );
+});
+`;
+
+  if ('serviceWorker' in navigator) {
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl  = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl, { scope: './' })
+      .then(() => console.log('[LexAI PWA] Service Worker registrado.'))
+      .catch(e => console.warn('[LexAI PWA] SW falhou:', e));
+  }
+
+  // ── 4. DETECÇÃO DO INSTALL PROMPT (Android/Chrome/Edge) ──
+  let deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Mostra todos os pontos de entrada de instalação
+    document.getElementById('pwaInstallFab').classList.add('show');
+    const heroBtn   = document.getElementById('heroInstallBtn');
+    const footerBtn = document.getElementById('footerInstallBtn');
+    if (heroBtn)   heroBtn.style.display   = 'inline-flex';
+    if (footerBtn) footerBtn.style.display = 'inline-block';
+  });
+
+  // Esconde o FAB se já estiver instalado
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    document.getElementById('pwaInstallFab').classList.remove('show');
+    const heroBtn   = document.getElementById('heroInstallBtn');
+    const footerBtn = document.getElementById('footerInstallBtn');
+    if (heroBtn)   heroBtn.style.display   = 'none';
+    if (footerBtn) footerBtn.style.display = 'none';
+    pwaToast('✅ LexAI instalado com sucesso!');
+  });
+
+  // ── 5. DETECÇÃO iOS (Safari não tem beforeinstallprompt) ──
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isInStandalone = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+
+  if (isIos && !isInStandalone && !localStorage.getItem('pwaIosDismissed')) {
+    // Exibe o banner iOS após 3 segundos
+    setTimeout(() => {
+      document.getElementById('pwaIosBanner').classList.add('show');
+    }, 3000);
+  }
+
+})(); // fim do IIFE initPWA
+
+/** Dispara o prompt de instalação nativo */
+function pwaInstall() {
+  const fab = document.getElementById('pwaInstallFab');
+  // Se não tiver prompt (iOS ou já instalado), mostra instruções iOS
+  if (!window._pwaDeferred) {
+    pwaShowIosInstructions();
+    return;
+  }
+  window._pwaDeferred.prompt();
+  window._pwaDeferred.userChoice.then(choice => {
+    if (choice.outcome === 'accepted') {
+      fab.classList.remove('show');
+      pwaToast('✅ App instalado!');
+    }
+    window._pwaDeferred = null;
+  });
+}
+
+// Guarda o prompt em variável global acessível pela função pwaInstall
+window.addEventListener('beforeinstallprompt', e => {
+  window._pwaDeferred = e;
+});
+
+/** Exibe/esconde o banner de instrução iOS manualmente */
+function pwaShowIosInstructions() {
+  const banner = document.getElementById('pwaIosBanner');
+  banner.classList.toggle('show');
+}
+
+/** Exibe um toast de confirmação temporário */
+function pwaToast(msg) {
+  const t = document.getElementById('pwaToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
 </script>
 </body>
 </html>
